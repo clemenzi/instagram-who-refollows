@@ -3,6 +3,7 @@
 </p>
 
 # Who refollows me?
+
 A lightweight browser extension to find the Instagram profiles you follow that do not follow you back. Built with React, Tailwind CSS v4, and WXT.
 
 ## What it does
@@ -18,4 +19,4 @@ Open Instagram, start a scan, and get a clean list of accounts that are in your 
 
 The extension runs from your browser while you are logged into Instagram. It does not ship with a server and does not store your Instagram data remotely.
 
-*Spiritual successor to [Who Follows Back](https://github.com/clemenzi/who-follows-back)*
+_Spiritual successor to [Who Follows Back](https://github.com/clemenzi/who-follows-back)_
