@@ -50,17 +50,13 @@ function getUsernameFromPath(pathname = window.location.pathname) {
 }
 
 async function getLoggedInUsername(): Promise<string> {
-  const endpoints = [
-    '/api/v1/accounts/edit/web_form_data/',
-    '/api/v1/accounts/current_user/',
-  ];
+  const endpoints = ['/api/v1/accounts/edit/web_form_data/', '/api/v1/accounts/current_user/'];
 
   for (const endpoint of endpoints) {
     try {
-      const data = await fetchInstagramJson<InstagramCurrentUserResponse>(
-        endpoint,
-        { edit: 'true' },
-      );
+      const data = await fetchInstagramJson<InstagramCurrentUserResponse>(endpoint, {
+        edit: 'true',
+      });
       const username = data.form_data?.username ?? data.user?.username;
 
       if (username) {
@@ -126,27 +122,21 @@ export async function fetchProfiles(
   while (true) {
     page += 1;
 
-    const data: InstagramGraphqlResponse = await fetchInstagramJson(
-      '/graphql/query/',
-      {
-        query_hash: connection.queryHash,
-        variables: JSON.stringify({
-          id: userId,
-          include_reel: true,
-          fetch_mutual: true,
-          first: PAGE_SIZE,
-          after,
-        }),
-      },
-    );
+    const data: InstagramGraphqlResponse = await fetchInstagramJson('/graphql/query/', {
+      query_hash: connection.queryHash,
+      variables: JSON.stringify({
+        id: userId,
+        include_reel: true,
+        fetch_mutual: true,
+        first: PAGE_SIZE,
+        after,
+      }),
+    });
 
-    const result: InstagramProfilesResponse | undefined =
-      data.data?.user?.[connection.edge];
+    const result: InstagramProfilesResponse | undefined = data.data?.user?.[connection.edge];
 
     if (!result) {
-      throw new Error(
-        `Instagram response did not include "${connection.edge}"`,
-      );
+      throw new Error(`Instagram response did not include "${connection.edge}"`);
     }
 
     profiles.push(
@@ -167,9 +157,7 @@ export async function fetchProfiles(
       page,
     });
 
-    console.log(
-      `[progress] ${connection.edge}: page ${page}, total collected ${profiles.length}`,
-    );
+    console.log(`[progress] ${connection.edge}: page ${page}, total collected ${profiles.length}`);
 
     if (!result.page_info.has_next_page) {
       console.log(`[progress] completed ${connection.edge}: ${profiles.length}`);

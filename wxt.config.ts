@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   manifest: {
-    name: "Who refollows me?",
+    name: 'Who refollows me?',
     description: "Check who doesn't follow you back",
   },
   vite: () => ({

@@ -22,9 +22,7 @@ const PHASE_PROGRESS: Record<ProgressUpdate['phase'], number> = {
 };
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error
-    ? error.message
-    : 'Unexpected error during the scan.';
+  return error instanceof Error ? error.message : 'Unexpected error during the scan.';
 }
 
 function getProgressValue(progress: ProgressUpdate[]) {
@@ -131,12 +129,7 @@ function ResultsList({ profiles }: { profiles: Profile[] }) {
   );
 }
 
-export default function Popup({
-  isOpen,
-  runSignal,
-  onClose,
-  onRun,
-}: PopupProps) {
+export default function Popup({ isOpen, runSignal, onClose, onRun }: PopupProps) {
   const [status, setStatus] = useState<Status>('idle');
   const [results, setResults] = useState<Results | null>(null);
   const [error, setError] = useState<string | null>(null);

@@ -1,8 +1,8 @@
 {
   "name": "instagram-who-refollows",
-  "description": "Find who you follow but they don't follow back", 
-  "private": true,
   "version": "0.0.0",
+  "private": true,
+  "description": "Find who you follow but they don't follow back",
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -12,6 +12,12 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "check": "pnpm run compile && pnpm run lint && pnpm run format:check",
+    "prepare": "lefthook install",
     "postinstall": "wxt prepare"
   },
   "dependencies": {
@@ -24,7 +30,11 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@wxt-dev/module-react": "^1.1.5",
+    "lefthook": "^2.1.6",
+    "oxfmt": "^0.48.0",
+    "oxlint": "^1.63.0",
     "typescript": "^5.9.3",
     "wxt": "^0.20.25"
-  }
+  },
+  "packageManager": "pnpm@11.0.9"
 }

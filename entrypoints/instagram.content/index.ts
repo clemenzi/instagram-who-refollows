@@ -3,12 +3,7 @@ import '../../assets/style.css';
 import { createElement } from 'react';
 import ReactDOM from 'react-dom/client';
 
-import {
-  CONNECTIONS,
-  fetchProfiles,
-  getTargetUsername,
-  getUserId,
-} from './api';
+import { CONNECTIONS, fetchProfiles, getTargetUsername, getUserId } from './api';
 import Popup from './popup';
 import type { ProgressUpdate, Results } from './types';
 import { buildResults, delay, PAGE_DELAY_MS, publishResults } from './utils';
@@ -16,9 +11,7 @@ import { buildResults, delay, PAGE_DELAY_MS, publishResults } from './utils';
 const RUN_MESSAGE = 'run';
 type ProgressListener = (progress: ProgressUpdate) => void;
 
-async function runInstagramAnalysis(
-  onProgress: ProgressListener,
-): Promise<Results> {
+async function runInstagramAnalysis(onProgress: ProgressListener): Promise<Results> {
   onProgress({
     phase: 'target',
     message: 'Identifying the profile to analyze...',

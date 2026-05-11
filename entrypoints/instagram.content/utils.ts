@@ -32,10 +32,7 @@ export async function fetchInstagramJson<T>(
   return response.json();
 }
 
-export function buildResults(
-  followings: Profile[],
-  followers: Profile[],
-): Results {
+export function buildResults(followings: Profile[], followers: Profile[]): Results {
   const followerUsernames = new Set(followers.map(({ username }) => username));
   const followingsWhoFollowBack: Profile[] = [];
   const dontFollowMeBack: Profile[] = [];

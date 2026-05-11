@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "plugins": ["react", "typescript"],
+  "rules": {
+    "eslint/no-await-in-loop": "off",
+    "react/react-in-jsx-scope": "off"
+  },
+  "env": {
+    "browser": true,
+    "webextensions": true,
+    "es2024": true
+  },
+  "ignorePatterns": [".wxt/**", ".output/**", "node_modules/**"]
+}
