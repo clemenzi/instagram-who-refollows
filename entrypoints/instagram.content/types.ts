@@ -13,10 +13,10 @@ export type Results = {
 
 export type Connection = {
   queryHash: string;
-  edge: 'edge_followed_by' | 'edge_follow';
+  edge: "edge_followed_by" | "edge_follow";
 };
 
-export type ProgressPhase = 'target' | 'user-id' | 'followings' | 'followers' | 'results';
+export type ProgressPhase = "target" | "user-id" | "followings" | "followers" | "results";
 
 export type ProgressUpdate = {
   phase: ProgressPhase;

@@ -3,25 +3,25 @@ pre-commit:
   jobs:
     - name: oxlint
       glob:
-        - '*.js'
-        - '*.jsx'
-        - '*.ts'
-        - '*.tsx'
-        - '*.mjs'
-        - '*.cjs'
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.mjs"
+        - "*.cjs"
       run: pnpm oxlint --fix {staged_files}
       stage_fixed: true
 
     - name: oxfmt
       glob:
-        - '*.js'
-        - '*.jsx'
-        - '*.ts'
-        - '*.tsx'
-        - '*.mjs'
-        - '*.cjs'
-        - '*.json'
-        - '*.jsonc'
-        - '*.css'
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.mjs"
+        - "*.cjs"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
       run: pnpm oxfmt {staged_files}
       stage_fixed: true

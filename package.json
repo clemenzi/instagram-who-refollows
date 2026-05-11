@@ -1,6 +1,6 @@
 {
   "name": "instagram-who-refollows",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Find who you follow but they don't follow back",
   "type": "module",
@@ -29,6 +29,7 @@
   "devDependencies": {
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@wxt-dev/auto-icons": "^1.1.1",
     "@wxt-dev/module-react": "^1.1.5",
     "lefthook": "^2.1.6",
     "oxfmt": "^0.48.0",

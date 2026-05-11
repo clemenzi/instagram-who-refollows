@@ -1,6 +1,6 @@
-import type { Profile, Results } from './types';
+import type { Profile, Results } from "./types";
 
-export const INSTAGRAM_ORIGIN = 'https://www.instagram.com';
+export const INSTAGRAM_ORIGIN = "https://www.instagram.com";
 export const PROFILE_URL = `${INSTAGRAM_ORIGIN}/`;
 export const PAGE_SIZE = 50;
 export const PAGE_DELAY_MS = 750;
@@ -21,8 +21,8 @@ export async function fetchInstagramJson<T>(
   }
 
   const response = await fetch(url, {
-    credentials: 'include',
-    headers: { 'x-ig-app-id': '936619743392459' },
+    credentials: "include",
+    headers: { "x-ig-app-id": "936619743392459" },
   });
 
   if (!response.ok) {
@@ -56,11 +56,11 @@ export function buildResults(followings: Profile[], followers: Profile[]): Resul
 export function publishResults(results: Results) {
   Object.assign(globalThis, results, { results });
 
-  console.log('[results]', results);
+  console.log("[results]", results);
   console.table(
     results.dontFollowMeBack.map(({ username, full_name }) => ({
       username,
-      nome: full_name || '-',
+      nome: full_name || "-",
       profilo: `${PROFILE_URL}${username}/`,
     })),
   );

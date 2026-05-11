@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import type { Profile, ProgressUpdate, Results } from './types';
-import { PROFILE_URL } from './utils';
+import type { Profile, ProgressUpdate, Results } from "./types";
+import { PROFILE_URL } from "./utils";
 
 type PopupProps = {
   isOpen: boolean;
@@ -10,19 +10,19 @@ type PopupProps = {
   onRun: (onProgress: (progress: ProgressUpdate) => void) => Promise<Results>;
 };
 
-type Status = 'idle' | 'loading' | 'success' | 'error';
+type Status = "idle" | "loading" | "success" | "error";
 
 const MAX_PROGRESS_ITEMS = 5;
-const PHASE_PROGRESS: Record<ProgressUpdate['phase'], number> = {
+const PHASE_PROGRESS: Record<ProgressUpdate["phase"], number> = {
   target: 8,
-  'user-id': 18,
+  "user-id": 18,
   followings: 28,
   followers: 64,
   results: 100,
 };
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : 'Unexpected error during the scan.';
+  return error instanceof Error ? error.message : "Unexpected error during the scan.";
 }
 
 function getProgressValue(progress: ProgressUpdate[]) {
@@ -34,11 +34,11 @@ function getProgressValue(progress: ProgressUpdate[]) {
 
   const phaseStart = PHASE_PROGRESS[currentProgress.phase];
 
-  if (currentProgress.phase === 'followings') {
+  if (currentProgress.phase === "followings") {
     return Math.min(58, phaseStart + (currentProgress.page ?? 0) * 6);
   }
 
-  if (currentProgress.phase === 'followers') {
+  if (currentProgress.phase === "followers") {
     return Math.min(94, phaseStart + (currentProgress.page ?? 0) * 6);
   }
 
@@ -58,9 +58,9 @@ function ProgressPanel({ progress }: { progress: ProgressUpdate[] }) {
         />
       </div>
       <p className="truncate text-center text-xs leading-4 text-neutral-500 dark:text-neutral-400">
-        {currentProgress?.message ?? 'Starting scan...'}
+        {currentProgress?.message ?? "Starting scan..."}
       </p>
-      {typeof currentProgress?.collected === 'number' && (
+      {typeof currentProgress?.collected === "number" && (
         <p className="text-center text-[11px] leading-4 text-neutral-400 dark:text-neutral-500">
           {currentProgress.collected} profiles read
         </p>
@@ -82,7 +82,7 @@ function Avatar({ profile }: { profile: Profile }) {
           referrerPolicy="no-referrer"
           src={profile.profile_pic_url}
           onError={(event) => {
-            event.currentTarget.style.display = 'none';
+            event.currentTarget.style.display = "none";
           }}
         />
       )}
@@ -104,7 +104,7 @@ function ProfileRow({ profile }: { profile: Profile }) {
           @{profile.username}
         </a>
         <p className="truncate text-xs leading-4 text-neutral-500 dark:text-neutral-400">
-          {profile.full_name || '-'}
+          {profile.full_name || "-"}
         </p>
       </div>
     </li>
@@ -130,14 +130,14 @@ function ResultsList({ profiles }: { profiles: Profile[] }) {
 }
 
 export default function Popup({ isOpen, runSignal, onClose, onRun }: PopupProps) {
-  const [status, setStatus] = useState<Status>('idle');
+  const [status, setStatus] = useState<Status>("idle");
   const [results, setResults] = useState<Results | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<ProgressUpdate[]>([]);
   const handledRunSignal = useRef(0);
 
   const handleRun = useCallback(async () => {
-    setStatus('loading');
+    setStatus("loading");
     setError(null);
     setResults(null);
     setProgress([]);
@@ -151,10 +151,10 @@ export default function Popup({ isOpen, runSignal, onClose, onRun }: PopupProps)
       });
 
       setResults(nextResults);
-      setStatus('success');
+      setStatus("success");
     } catch (caughtError) {
       setError(getErrorMessage(caughtError));
-      setStatus('error');
+      setStatus("error");
     }
   }, [onRun]);
 
@@ -183,9 +183,9 @@ export default function Popup({ isOpen, runSignal, onClose, onRun }: PopupProps)
       </button>
 
       <div className="space-y-3 p-3 pt-12">
-        {status === 'loading' && <ProgressPanel progress={progress} />}
+        {status === "loading" && <ProgressPanel progress={progress} />}
 
-        {status === 'error' && error && (
+        {status === "error" && error && (
           <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm leading-5 text-red-700 dark:border-red-900/70 dark:bg-red-950/30 dark:text-red-300">
             {error}
           </div>
@@ -196,7 +196,7 @@ export default function Popup({ isOpen, runSignal, onClose, onRun }: PopupProps)
             <button
               className="flex min-h-11 w-full items-center justify-center rounded-md bg-neutral-950 px-4 text-sm font-semibold text-white transition hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-wait disabled:bg-neutral-400 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 dark:focus:ring-neutral-500 dark:focus:ring-offset-neutral-950 dark:disabled:bg-neutral-600 dark:disabled:text-neutral-300"
               type="button"
-              disabled={status === 'loading'}
+              disabled={status === "loading"}
               onClick={handleRun}
             >
               Check again
