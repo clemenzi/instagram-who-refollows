@@ -8,6 +8,7 @@ export default defineConfig({
   manifest: {
     name: "Who refollows me?",
     description: "Check who doesn't follow you back",
+    permissions: ["tabs"],
   },
   vite: () => ({
     plugins: [tailwindcss()],
