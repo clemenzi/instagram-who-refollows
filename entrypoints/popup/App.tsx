@@ -16,7 +16,9 @@ function App() {
 
       if (instagramTab?.id) {
         await browser.tabs.update(instagramTab.id, { active: true });
-        await browser.tabs.sendMessage(instagramTab.id, "run");
+        await browser.tabs.create({
+          url: browser.runtime.getURL(`/scan.html?tabId=${instagramTab.id}`),
+        });
       } else {
         await browser.tabs.create({
           url: "https://www.instagram.com",
@@ -32,7 +34,7 @@ function App() {
   const statusCopy = {
     idle: "Ready.",
     starting: "Connecting to Instagram...",
-    sent: "Scan window opened on Instagram.",
+    sent: "Scan window opened.",
     error: "Open Instagram and try again.",
   } satisfies Record<RunState, string>;
 

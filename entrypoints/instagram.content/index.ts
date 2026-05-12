@@ -1,15 +1,16 @@
-import "../../assets/style.css";
-
-import { createElement } from "react";
-import ReactDOM from "react-dom/client";
-
 import { CONNECTIONS, fetchProfiles, getTargetUsername, getUserId } from "./api";
-import Popup from "./popup";
 import type { ProgressUpdate, Results } from "./types";
 import { buildResults, delay, PAGE_DELAY_MS, publishResults } from "./utils";
 
 const RUN_MESSAGE = "run";
+const ANALYSIS_PORT = "instagram-analysis";
 type ProgressListener = (progress: ProgressUpdate) => void;
+
+type AnalysisPortMessage = { type: "run" };
+type AnalysisPortResponse =
+  | { type: "progress"; progress: ProgressUpdate }
+  | { type: "results"; results: Results }
+  | { type: "error"; message: string };
 
 async function runInstagramAnalysis(onProgress: ProgressListener): Promise<Results> {
   onProgress({
@@ -59,13 +60,9 @@ async function runInstagramAnalysis(onProgress: ProgressListener): Promise<Resul
 
 export default defineContentScript({
   matches: ["*://*.instagram.com/*"],
-  cssInjectionMode: "ui",
-  async main(ctx) {
+  main() {
     let activeRun: Promise<Results> | null = null;
     const progressListeners = new Set<ProgressListener>();
-    let isPopupOpen = false;
-    let runSignal = 0;
-    let root: ReturnType<typeof ReactDOM.createRoot> | null = null;
 
     const emitProgress = (progress: ProgressUpdate) => {
       for (const listener of progressListeners) {
@@ -86,50 +83,40 @@ export default defineContentScript({
       });
     };
 
-    const renderPopup = () => {
-      root?.render(
-        createElement(Popup, {
-          isOpen: isPopupOpen,
-          runSignal,
-          onClose: () => {
-            isPopupOpen = false;
-            renderPopup();
-          },
-          onRun: runOnce,
-        }),
-      );
-    };
-
-    const ui = await createShadowRootUi(ctx, {
-      name: "instagram-who-refollows",
-      position: "inline",
-      anchor: "body",
-      isolateEvents: true,
-      onMount: (container) => {
-        const app = document.createElement("div");
-        container.append(app);
-
-        root = ReactDOM.createRoot(app);
-        renderPopup();
-
-        return root;
-      },
-      onRemove: (mountedRoot) => {
-        mountedRoot?.unmount();
-        root = null;
-      },
-    });
-
-    ui.mount();
-
-    browser.runtime.onMessage.addListener(async (message) => {
-      if (message !== RUN_MESSAGE) {
+    browser.runtime.onConnect.addListener((port) => {
+      if (port.name !== ANALYSIS_PORT) {
         return;
       }
 
-      isPopupOpen = true;
-      runSignal += 1;
-      renderPopup();
+      const onProgress = (progress: ProgressUpdate) => {
+        port.postMessage({ type: "progress", progress } satisfies AnalysisPortResponse);
+      };
+
+      const onMessage = (message: AnalysisPortMessage) => {
+        if (message.type !== RUN_MESSAGE) {
+          return;
+        }
+
+        void runOnce(onProgress)
+          .then((results) => {
+            port.postMessage({ type: "results", results } satisfies AnalysisPortResponse);
+          })
+          .catch((error: unknown) => {
+            const errorMessage =
+              error instanceof Error ? error.message : "Unexpected error during the scan.";
+
+            port.postMessage({
+              type: "error",
+              message: errorMessage,
+            } satisfies AnalysisPortResponse);
+          });
+      };
+
+      port.onMessage.addListener(onMessage);
+      port.onDisconnect.addListener(() => {
+        progressListeners.delete(onProgress);
+        port.onMessage.removeListener(onMessage);
+      });
     });
   },
 });
