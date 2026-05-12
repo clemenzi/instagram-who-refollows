@@ -1,4 +1,5 @@
 export type Profile = {
+  id?: string;
   username: string;
   full_name: string;
   profile_pic_url?: string;

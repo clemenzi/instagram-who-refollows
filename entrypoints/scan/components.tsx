@@ -2,6 +2,14 @@ import type { Profile, ProgressUpdate, Results } from "../instagram.content/type
 import { PROFILE_URL } from "../instagram.content/utils";
 import { getProgressValue } from "./progress";
 
+export type ProfileActionState =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "done" }
+  | { status: "error"; message: string };
+
+const IDLE_PROFILE_ACTION = { status: "idle" } satisfies ProfileActionState;
+
 export function ProgressPanel({ progress }: { progress: ProgressUpdate[] }) {
   const currentProgress = progress.at(-1);
   const progressValue = getProgressValue(progress);
@@ -75,7 +83,15 @@ export function ResultsSummary({ results }: { results: Results }) {
   );
 }
 
-export function ResultsList({ profiles }: { profiles: Profile[] }) {
+export function ResultsList({
+  actionStates,
+  onUnfollow,
+  profiles,
+}: {
+  actionStates: Record<string, ProfileActionState>;
+  onUnfollow: (profile: Profile) => void;
+  profiles: Profile[];
+}) {
   return (
     <div className="overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
       {profiles.length === 0 ? (
@@ -85,7 +101,12 @@ export function ResultsList({ profiles }: { profiles: Profile[] }) {
       ) : (
         <ul className="max-h-[calc(100vh-260px)] min-h-52 divide-y divide-neutral-200 overflow-y-auto dark:divide-neutral-800">
           {profiles.map((profile) => (
-            <ProfileRow key={profile.username} profile={profile} />
+            <ProfileRow
+              actionState={actionStates[profile.username] ?? IDLE_PROFILE_ACTION}
+              key={profile.username}
+              profile={profile}
+              onUnfollow={onUnfollow}
+            />
           ))}
         </ul>
       )}
@@ -93,11 +114,23 @@ export function ResultsList({ profiles }: { profiles: Profile[] }) {
   );
 }
 
-function ProfileRow({ profile }: { profile: Profile }) {
+function ProfileRow({
+  actionState,
+  onUnfollow,
+  profile,
+}: {
+  actionState: ProfileActionState;
+  onUnfollow: (profile: Profile) => void;
+  profile: Profile;
+}) {
+  const isBusy = actionState.status === "loading";
+  const isDone = actionState.status === "done";
+  const buttonLabel = isBusy ? "Unfollowing..." : isDone ? "Unfollowed" : "Unfollow";
+
   return (
     <li className="flex items-center gap-3 px-3 py-2.5 transition hover:bg-neutral-50 dark:hover:bg-neutral-900">
       <Avatar profile={profile} />
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1">
         <a
           className="block truncate text-sm font-semibold leading-5 text-neutral-950 transition hover:text-sky-600 dark:text-neutral-50 dark:hover:text-sky-400"
           href={`${PROFILE_URL}${profile.username}/`}
@@ -109,7 +142,20 @@ function ProfileRow({ profile }: { profile: Profile }) {
         <p className="truncate text-xs leading-4 text-neutral-500 dark:text-neutral-400">
           {profile.full_name || "-"}
         </p>
+        {actionState.status === "error" && (
+          <p className="truncate text-xs leading-4 text-red-600 dark:text-red-400">
+            {actionState.message}
+          </p>
+        )}
       </div>
+      <button
+        className="min-h-9 shrink-0 rounded-md border border-neutral-300 px-3 text-xs font-semibold text-neutral-800 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-neutral-400 disabled:cursor-default disabled:border-neutral-200 disabled:bg-neutral-100 disabled:text-neutral-400 dark:border-neutral-700 dark:text-neutral-100 dark:hover:border-red-800 dark:hover:bg-red-950/30 dark:hover:text-red-300 dark:focus:ring-neutral-500 dark:disabled:border-neutral-800 dark:disabled:bg-neutral-900 dark:disabled:text-neutral-500"
+        type="button"
+        disabled={isBusy || isDone}
+        onClick={() => onUnfollow(profile)}
+      >
+        {buttonLabel}
+      </button>
     </li>
   );
 }
@@ -118,19 +164,8 @@ function Avatar({ profile }: { profile: Profile }) {
   const initial = profile.username.charAt(0).toUpperCase();
 
   return (
-    <div className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-neutral-200 text-sm font-semibold text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
+    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-neutral-200 text-sm font-semibold text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
       <span>{initial}</span>
-      {profile.profile_pic_url && (
-        <img
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-          referrerPolicy="no-referrer"
-          src={profile.profile_pic_url}
-          onError={(event) => {
-            event.currentTarget.style.display = "none";
-          }}
-        />
-      )}
     </div>
   );
 }

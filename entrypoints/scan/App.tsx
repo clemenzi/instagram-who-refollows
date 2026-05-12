@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import type { ProgressUpdate, Results } from "../instagram.content/types";
+import type { Profile, ProgressUpdate, Results } from "../instagram.content/types";
 import {
   connectToAnalysisPort,
   keepRecentProgress,
@@ -10,12 +10,18 @@ import {
 import {
   ErrorMessage,
   MissingTabMessage,
+  type ProfileActionState,
   ProgressPanel,
   ResultsList,
   ResultsSummary,
 } from "./components";
+import { unfollowFromScan } from "./actions";
 
 type ScanStatus = "loading" | "success" | "error";
+
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "Could not unfollow this profile.";
+}
 
 function getTabIdFromUrl() {
   const tabId = new URLSearchParams(window.location.search).get("tabId");
@@ -29,6 +35,7 @@ function ScanPage({ tabId }: { tabId: number }) {
   const [results, setResults] = useState<Results | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<ProgressUpdate[]>([]);
+  const [unfollowStates, setUnfollowStates] = useState<Record<string, ProfileActionState>>({});
   const portRef = useRef<Browser.runtime.Port | null>(null);
 
   const startScan = useCallback(() => {
@@ -37,6 +44,7 @@ function ScanPage({ tabId }: { tabId: number }) {
     setError(null);
     setResults(null);
     setProgress([]);
+    setUnfollowStates({});
 
     let port: Browser.runtime.Port;
 
@@ -63,12 +71,20 @@ function ScanPage({ tabId }: { tabId: number }) {
         return;
       }
 
+      if (message.type !== "error") {
+        return;
+      }
+
       setError(message.message);
       setStatus("error");
       port.disconnect();
     });
 
     port.onDisconnect.addListener(() => {
+      if (portRef.current === port) {
+        portRef.current = null;
+      }
+
       if (browser.runtime.lastError) {
         setError("Could not connect to Instagram. Reload Instagram and start again.");
         setStatus("error");
@@ -77,6 +93,35 @@ function ScanPage({ tabId }: { tabId: number }) {
 
     port.postMessage(RUN_ANALYSIS_MESSAGE);
   }, [tabId]);
+
+  const unfollowProfile = useCallback(async (profile: Profile) => {
+    setUnfollowStates((states) => ({ ...states, [profile.username]: { status: "loading" } }));
+
+    try {
+      await unfollowFromScan(profile);
+
+      setUnfollowStates((states) => ({ ...states, [profile.username]: { status: "done" } }));
+      setResults((currentResults) =>
+        currentResults
+          ? {
+              ...currentResults,
+              dontFollowMeBack: currentResults.dontFollowMeBack.filter(
+                ({ username }) => username !== profile.username,
+              ),
+              followingsCount: Math.max(0, currentResults.followingsCount - 1),
+            }
+          : currentResults,
+      );
+    } catch (unfollowError) {
+      setUnfollowStates((states) => ({
+        ...states,
+        [profile.username]: {
+          status: "error",
+          message: getErrorMessage(unfollowError),
+        },
+      }));
+    }
+  }, []);
 
   useEffect(() => {
     startScan();
@@ -115,7 +160,11 @@ function ScanPage({ tabId }: { tabId: number }) {
         {results && (
           <div className="space-y-3">
             <ResultsSummary results={results} />
-            <ResultsList profiles={results.dontFollowMeBack} />
+            <ResultsList
+              actionStates={unfollowStates}
+              profiles={results.dontFollowMeBack}
+              onUnfollow={unfollowProfile}
+            />
           </div>
         )}
       </section>

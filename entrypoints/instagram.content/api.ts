@@ -140,6 +140,7 @@ function getProgressMessage(phase: ProgressUpdate["phase"], collected: number) {
 
 function toProfile({ node }: InstagramProfilesResponse["edges"][number]): Profile {
   return {
+    id: node.id,
     username: node.username,
     full_name: node.full_name,
     profile_pic_url: node.profile_pic_url,

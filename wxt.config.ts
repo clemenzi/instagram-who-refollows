@@ -8,7 +8,8 @@ export default defineConfig({
   manifest: {
     name: "Who refollows me?",
     description: "Check who doesn't follow you back",
-    permissions: ["tabs"],
+    permissions: ["tabs", "cookies"],
+    host_permissions: ["https://www.instagram.com/*"],
   },
   vite: () => ({
     plugins: [tailwindcss()],
