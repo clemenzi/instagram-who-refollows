@@ -1,6 +1,6 @@
 {
   "name": "instagram-who-refollows",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Find who you follow but they don't follow back",
   "type": "module",
