@@ -2,6 +2,36 @@ import { useState } from "react";
 
 type RunState = "idle" | "starting" | "sent" | "error";
 
+const INSTAGRAM_TAB_URL = "*://*.instagram.com/*";
+const INSTAGRAM_HOME_URL = "https://www.instagram.com";
+const STATUS_COPY = {
+  idle: "Ready.",
+  starting: "Connecting to Instagram...",
+  sent: "Scan window opened.",
+  error: "Open Instagram and try again.",
+} satisfies Record<RunState, string>;
+
+async function findInstagramTab() {
+  const tabs = await browser.tabs.query({
+    url: INSTAGRAM_TAB_URL,
+  });
+
+  return tabs.find((tab) => typeof tab.id === "number") ?? null;
+}
+
+async function openScanWindow(tabId: number) {
+  await browser.tabs.update(tabId, { active: true });
+  await browser.tabs.create({
+    url: browser.runtime.getURL(`/scan.html?tabId=${tabId}`),
+  });
+}
+
+async function openInstagramHome() {
+  await browser.tabs.create({
+    url: INSTAGRAM_HOME_URL,
+  });
+}
+
 function App() {
   const [runState, setRunState] = useState<RunState>("idle");
 
@@ -9,20 +39,12 @@ function App() {
     setRunState("starting");
 
     try {
-      const tabs = await browser.tabs.query({
-        url: "*://*.instagram.com/*",
-      });
-      const instagramTab = tabs.find((tab) => typeof tab.id === "number");
+      const instagramTab = await findInstagramTab();
 
       if (instagramTab?.id) {
-        await browser.tabs.update(instagramTab.id, { active: true });
-        await browser.tabs.create({
-          url: browser.runtime.getURL(`/scan.html?tabId=${instagramTab.id}`),
-        });
+        await openScanWindow(instagramTab.id);
       } else {
-        await browser.tabs.create({
-          url: "https://www.instagram.com",
-        });
+        await openInstagramHome();
       }
 
       setRunState("sent");
@@ -30,13 +52,6 @@ function App() {
       setRunState("error");
     }
   };
-
-  const statusCopy = {
-    idle: "Ready.",
-    starting: "Connecting to Instagram...",
-    sent: "Scan window opened.",
-    error: "Open Instagram and try again.",
-  } satisfies Record<RunState, string>;
 
   return (
     <main className="w-80 bg-white p-4 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
@@ -66,7 +81,7 @@ function App() {
               : "border-neutral-200 bg-neutral-50 text-neutral-600 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300"
           }`}
         >
-          {statusCopy[runState]}
+          {STATUS_COPY[runState]}
         </p>
       </section>
     </main>

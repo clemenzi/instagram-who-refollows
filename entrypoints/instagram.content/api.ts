@@ -13,6 +13,11 @@ type FetchProfilesOptions = {
   onProgress?: (progress: ProgressUpdate) => void;
 };
 
+const CURRENT_USER_ENDPOINTS = [
+  "/api/v1/accounts/edit/web_form_data/",
+  "/api/v1/accounts/current_user/",
+];
+
 const RESERVED_PATH_SEGMENTS = new Set([
   "accounts",
   "api",
@@ -50,14 +55,9 @@ function getUsernameFromPath(pathname = window.location.pathname) {
 }
 
 async function getLoggedInUsername(): Promise<string> {
-  const endpoints = ["/api/v1/accounts/edit/web_form_data/", "/api/v1/accounts/current_user/"];
-
-  for (const endpoint of endpoints) {
+  for (const endpoint of CURRENT_USER_ENDPOINTS) {
     try {
-      const data = await fetchInstagramJson<InstagramCurrentUserResponse>(endpoint, {
-        edit: "true",
-      });
-      const username = data.form_data?.username ?? data.user?.username;
+      const username = await fetchLoggedInUsername(endpoint);
 
       if (username) {
         return username;
@@ -69,6 +69,14 @@ async function getLoggedInUsername(): Promise<string> {
   }
 
   throw new Error("Could not resolve the logged-in Instagram username.");
+}
+
+async function fetchLoggedInUsername(endpoint: string) {
+  const data = await fetchInstagramJson<InstagramCurrentUserResponse>(endpoint, {
+    edit: "true",
+  });
+
+  return data.form_data?.username ?? data.user?.username;
 }
 
 export async function getTargetUsername() {
@@ -83,15 +91,18 @@ export async function getTargetUsername() {
 }
 
 export async function getUserId(username: string): Promise<string> {
+  return (await getProfilePageUserId(username)) ?? (await getSearchResultUserId(username));
+}
+
+async function getProfilePageUserId(username: string) {
   const profileData = await fetchInstagramJson<{
     data?: { user?: { id?: string } };
   }>("/api/v1/users/web_profile_info/", { username });
-  const profileId = profileData.data?.user?.id;
 
-  if (profileId) {
-    return profileId;
-  }
+  return profileData.data?.user?.id ?? null;
+}
 
+async function getSearchResultUserId(username: string) {
   const searchData = await fetchInstagramJson<{
     users?: Array<{ user?: { pk?: string; username?: string } }>;
   }>("/web/search/topsearch/", { query: username });
@@ -106,6 +117,33 @@ export async function getUserId(username: string): Promise<string> {
   }
 
   return searchId;
+}
+
+function getProfilesPage(
+  data: InstagramGraphqlResponse,
+  connection: Connection,
+): InstagramProfilesResponse {
+  const page = data.data?.user?.[connection.edge];
+
+  if (!page) {
+    throw new Error(`Instagram response did not include "${connection.edge}"`);
+  }
+
+  return page;
+}
+
+function getProgressMessage(phase: ProgressUpdate["phase"], collected: number) {
+  return phase === "followings"
+    ? `Read ${collected} profiles you follow.`
+    : `Read ${collected} followers.`;
+}
+
+function toProfile({ node }: InstagramProfilesResponse["edges"][number]): Profile {
+  return {
+    username: node.username,
+    full_name: node.full_name,
+    profile_pic_url: node.profile_pic_url,
+  };
 }
 
 export async function fetchProfiles(
@@ -133,38 +171,25 @@ export async function fetchProfiles(
       }),
     });
 
-    const result: InstagramProfilesResponse | undefined = data.data?.user?.[connection.edge];
+    const profilePage = getProfilesPage(data, connection);
 
-    if (!result) {
-      throw new Error(`Instagram response did not include "${connection.edge}"`);
-    }
-
-    profiles.push(
-      ...result.edges.map(({ node }) => ({
-        username: node.username,
-        full_name: node.full_name,
-        profile_pic_url: node.profile_pic_url,
-      })),
-    );
+    profiles.push(...profilePage.edges.map(toProfile));
 
     options.onProgress?.({
       phase: options.phase,
-      message:
-        options.phase === "followings"
-          ? `Read ${profiles.length} profiles you follow.`
-          : `Read ${profiles.length} followers.`,
+      message: getProgressMessage(options.phase, profiles.length),
       collected: profiles.length,
       page,
     });
 
     console.log(`[progress] ${connection.edge}: page ${page}, total collected ${profiles.length}`);
 
-    if (!result.page_info.has_next_page) {
+    if (!profilePage.page_info.has_next_page) {
       console.log(`[progress] completed ${connection.edge}: ${profiles.length}`);
       return profiles;
     }
 
-    after = result.page_info.end_cursor;
+    after = profilePage.page_info.end_cursor;
     await delay(PAGE_DELAY_MS);
   }
 }
