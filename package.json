@@ -1,6 +1,6 @@
 {
   "name": "instagram-who-refollows",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "Find who you follow but they don't follow back",
   "type": "module",
@@ -22,20 +22,20 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
-    "@types/react": "^19.2.14",
+    "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
     "@wxt-dev/auto-icons": "^1.1.1",
-    "@wxt-dev/module-react": "^1.1.5",
-    "lefthook": "^2.1.6",
+    "@wxt-dev/module-react": "^1.2.2",
+    "lefthook": "^2.1.9",
     "oxfmt": "^0.48.0",
-    "oxlint": "^1.63.0",
+    "oxlint": "^1.68.0",
     "typescript": "^5.9.3",
-    "wxt": "^0.20.25"
+    "wxt": "^0.20.26"
   },
   "packageManager": "pnpm@11.0.9"
 }
