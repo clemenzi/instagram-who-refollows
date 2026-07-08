@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/icon.png" alt="Who refollows me? icon" width="120">
+  <img src="./apps/extension/assets/icon.png" alt="Who refollows me? icon" width="120">
 </p>
 
 # Who refollows me?

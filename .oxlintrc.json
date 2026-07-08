@@ -15,5 +15,5 @@
     "webextensions": true,
     "es2024": true
   },
-  "ignorePatterns": [".wxt/**", ".output/**", "node_modules/**"]
+  "ignorePatterns": ["**/.turbo/**", "**/.wxt/**", "**/.output/**", "**/node_modules/**"]
 }
