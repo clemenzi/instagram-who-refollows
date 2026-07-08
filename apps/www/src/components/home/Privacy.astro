@@ -8,7 +8,7 @@ import { ArrowUpRight, LockKeyhole } from "@lucide/astro";
   >
     <div class="hidden relative h-96 lg:h-full lg:flex items-center justify-center">
       <div
-        class="absolute inset-4 rounded-full bg-linear-to-br from-rose-500/70 via-fuchsia-500/40 to-transparent blur-3xl"
+        class="absolute inset-4 -left-1 rounded-full bg-linear-to-br from-rose-500/70 via-fuchsia-500/40 to-transparent blur-3xl"
       >
       </div>
       <div
@@ -18,7 +18,9 @@ import { ArrowUpRight, LockKeyhole } from "@lucide/astro";
       </div>
     </div>
     <div>
-      <h2 class="font-display text-4xl leading-tight font-bold tracking-tight md:text-6xl">
+      <h2
+        class="font-display text-4xl leading-tight font-bold tracking-tight md:text-6xl"
+      >
         What happens in your browser<br /><em
           class="bg-linear-to-r from-amber-300 via-rose-400 to-fuchsia-400 bg-clip-text font-display font-normal text-transparent"
           >stays in your browser.</em
@@ -36,7 +38,9 @@ import { ArrowUpRight, LockKeyhole } from "@lucide/astro";
             "No analytics or browsing trackers",
           ].map((item, index) => (
             <li class="flex items-center gap-5 border-b border-white/15 py-4 text-sm font-bold">
-              <span class="text-xs tracking-widest text-rose-400">0{index + 1}</span>
+              <span class="text-xs tracking-widest text-rose-400">
+                0{index + 1}
+              </span>
               {item}
             </li>
           ))

@@ -10,11 +10,7 @@ import { ChevronUp, SearchCheck } from "@lucide/astro";
       class="flex w-max items-center gap-2.5 justify-self-center text-sm font-bold md:justify-self-start"
       href="#top"
     >
-      <span
-        class="grid size-8 place-items-center rounded-xl bg-linear-to-br from-amber-300 to-fuchsia-500 text-white"
-      >
-        <SearchCheck class="size-4.5" stroke-width={2.2} aria-hidden="true" />
-      </span>
+      <img src="/favicon.png" alt="Logo" class="size-8" />
       Who refollows me?
     </a>
     <p class="m-0 font-display text-xs italic text-stone-500">
@@ -26,7 +22,11 @@ import { ChevronUp, SearchCheck } from "@lucide/astro";
       <a href="/privacy">Privacy</a>
       <a href="#faq">FAQ</a>
       <a class="inline-flex items-center gap-1" href="#top"
-        >Back to top <ChevronUp class="size-3.5" stroke-width={2.2} aria-hidden="true" /></a
+        >Back to top <ChevronUp
+          class="size-3.5"
+          stroke-width={2.2}
+          aria-hidden="true"
+        /></a
       >
     </div>
   </div>
