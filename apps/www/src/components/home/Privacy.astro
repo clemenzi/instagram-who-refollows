@@ -1,0 +1,56 @@
+---
+import { ArrowUpRight, LockKeyhole } from "@lucide/astro";
+---
+
+<section id="privacy" class="relative overflow-hidden bg-stone-950 text-white">
+  <div
+    class="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center px-4 py-20 md:px-6 md:py-24 lg:min-h-screen lg:grid-cols-2"
+  >
+    <div class="hidden relative h-96 lg:h-full lg:flex items-center justify-center">
+      <div
+        class="absolute inset-4 rounded-full bg-linear-to-br from-rose-500/70 via-fuchsia-500/40 to-transparent blur-3xl"
+      >
+      </div>
+      <div
+        class="grid -translate-x-1/2 -rotate-6 place-items-center rounded-4xl border border-white/20 bg-linear-to-br from-white/15 to-white/5 shadow-2xl backdrop-blur-md h-72 w-64 lg:translate-x-0"
+      >
+        <LockKeyhole class="size-32" stroke-width={1.8} aria-hidden="true" />
+      </div>
+    </div>
+    <div>
+      <h2 class="font-display text-4xl leading-tight font-bold tracking-tight md:text-6xl">
+        What happens in your browser<br /><em
+          class="bg-linear-to-r from-amber-300 via-rose-400 to-fuchsia-400 bg-clip-text font-display font-normal text-transparent"
+          >stays in your browser.</em
+        >
+      </h2>
+      <p class="my-7 max-w-3xl text-base leading-8 text-white/70">
+        Who refollows me? has no backend server. The comparison happens locally
+        using the Instagram tab you are already logged into.
+      </p>
+      <ul class="mb-8 max-w-3xl list-none border-t border-white/15 p-0">
+        {
+          [
+            "No Instagram password requested",
+            "No follower lists sent to us",
+            "No analytics or browsing trackers",
+          ].map((item, index) => (
+            <li class="flex items-center gap-5 border-b border-white/15 py-4 text-sm font-bold">
+              <span class="text-xs tracking-widest text-rose-400">0{index + 1}</span>
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+      <a
+        class="inline-flex items-center gap-2 border-b border-white/45 pb-1 text-xs font-extrabold"
+        href="/privacy"
+        >Read the plain-English privacy policy <ArrowUpRight
+          class="size-3.5"
+          stroke-width={2.2}
+          aria-hidden="true"
+        /></a
+      >
+    </div>
+  </div>
+</section>

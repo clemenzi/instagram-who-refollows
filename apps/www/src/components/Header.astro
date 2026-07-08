@@ -1,0 +1,50 @@
+---
+import { ArrowUpRight, SearchCheck } from "@lucide/astro";
+---
+
+<header class="border-b border-stone-900/10">
+  <div
+    class="relative z-20 mx-auto grid min-h-20 w-full max-w-7xl grid-cols-2 items-center px-4 md:min-h-24 md:grid-cols-3 md:px-6"
+  >
+    <a
+      class="flex w-max items-center gap-3 text-sm font-bold tracking-tight md:text-base"
+      href="#top"
+      aria-label="Who refollows me? home"
+    >
+      <span
+        class="grid size-9 place-items-center rounded-xl bg-linear-to-br from-amber-300 via-rose-400 to-fuchsia-500 text-white shadow-lg shadow-fuchsia-300/40"
+      >
+        <SearchCheck class="size-5" stroke-width={2.2} aria-hidden="true" />
+      </span>
+      <span class="max-w-24 leading-tight md:max-w-none">Who refollows me?</span
+      >
+    </a>
+
+    <nav class="hidden items-center gap-8 md:flex justify-center" aria-label="Main navigation">
+      <a
+        class="text-sm font-semibold transition-opacity hover:opacity-60"
+        href="#how-it-works">How it works</a
+      >
+      <a
+        class="text-sm font-semibold transition-opacity hover:opacity-60"
+        href="#privacy">Privacy</a
+      >
+      <a
+        class="text-sm font-semibold transition-opacity hover:opacity-60"
+        href="#faq">FAQ</a
+      >
+    </nav>
+
+    <a
+      class="inline-flex justify-self-end rounded-full bg-stone-900 px-4 py-2.5 text-xs font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg items-center"
+      href="#download"
+    >
+      Get the extension
+      <ArrowUpRight
+        class="ml-1 size-3.5"
+        stroke-width={2.2}
+        aria-hidden="true"
+      />
+    </a>
+  </div>
+</header>
