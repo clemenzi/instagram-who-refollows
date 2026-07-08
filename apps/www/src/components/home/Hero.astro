@@ -10,7 +10,7 @@ import {
   ShieldCheck,
 } from "@lucide/astro";
 
-const checks = ["No account needed", "Runs locally", "Always free"];
+const checks = ["No password", "No weird app", "Free"];
 
 const resultRows = [
   ["AL", "@analog.life", "Analog Life Magazine", "bg-lime-300 text-stone-900"],
@@ -26,15 +26,15 @@ const resultRows = [
     <h1
       class="max-w-2xl font-display text-5xl leading-none font-bold tracking-tight sm:text-6xl md:text-7xl"
     >
-      Your follows.<br />
+      See who you follow.<br />
       <span
         class="bg-linear-to-r from-rose-500 via-fuchsia-500 to-violet-600 bg-clip-text font-display text-transparent"
-        >Finally</span
-      > mutual.
+        >But doesn&apos;t follow back.</span
+      >
     </h1>
     <p class="mt-8 max-w-xl text-base leading-7 text-stone-700 md:text-lg">
-      Spot the Instagram accounts that do not follow you back without handing
-      your login or your data to anyone.
+      Open Instagram, run the scan, and get the list. That&apos;s it. No sketchy
+      tools, no account, no hassle.
     </p>
     <div
       class="mt-8 flex flex-col items-start gap-5 md:flex-row md:items-center md:gap-6"
@@ -44,13 +44,13 @@ const resultRows = [
         href="#download"
       >
         <ArrowDownToLine class="size-4" stroke-width={2.2} aria-hidden="true" />
-        Add to Chrome - it&apos;s free
+        Add to Chrome
       </a>
       <a
         class="inline-flex items-center gap-1 border-b border-current pb-0.5 text-sm font-extrabold"
         href="#how-it-works"
       >
-        See how it works
+        How it works
         <ChevronDown class="size-4" stroke-width={2.2} aria-hidden="true" />
       </a>
     </div>
@@ -141,7 +141,7 @@ const resultRows = [
               class="text-xs font-extrabold uppercase tracking-widest text-stone-500"
               >Scan complete</small
             ><strong class="font-display text-lg tracking-tight"
-              >Here&apos;s the mismatch.</strong
+              >Here&apos;s the list.</strong
             ></span
           >
         </div>
@@ -160,7 +160,7 @@ const resultRows = [
           </div>
           <div class="grid gap-0.5 bg-rose-50 p-3 text-rose-600">
             <strong class="text-lg md:text-xl">75</strong><span class="text-xs"
-              >Do not follow back</span
+              >Not following back</span
             >
           </div>
         </div>
@@ -213,7 +213,7 @@ const resultRows = [
       >
       <span class="grid"
         ><strong class="text-xs">Your data stays here.</strong><small
-          class="text-xs text-stone-500">Nothing is uploaded.</small
+          class="text-xs text-stone-500">Nothing gets uploaded.</small
         ></span
       >
     </div>

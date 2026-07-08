@@ -3,32 +3,115 @@ import { ArrowLeft } from "@lucide/astro";
 import Layout from "../layouts/Layout.astro";
 
 const sections = [
-  ["What the extension reads", "When you start a scan, the extension reads only the Instagram information needed to compare your followers and following lists: usernames, display names, profile picture URLs, and follower or following relationships."],
-  ["How it is processed", "All scan logic runs inside your browser, using the Instagram session you already have open. Who refollows me? does not have a backend server and does not send your results to the developer."],
-  ["Permissions and third parties", "The extension runs on Instagram pages so it can perform a scan when you request one. It communicates with Instagram only to retrieve the information needed for that scan. Your use of Instagram remains subject to Instagram's own terms and privacy policy."],
-  ["Questions", "For questions about this policy, contact the developer through the repository or distribution page where you obtained the extension."],
+  [
+    "Summary",
+    "Who refollows me? runs locally in your browser while you are logged in to Instagram. It does not create user accounts, does not use a backend server, and does not send your Instagram data to the developer.",
+  ],
+  [
+    "What the extension reads",
+    "When you start a scan, the extension reads only the Instagram information needed to compare your followers and following lists: usernames, display names, profile picture URLs, and follower or following relationships.",
+  ],
+  [
+    "How it is processed",
+    "All scan logic runs inside your browser, using the Instagram session you already have open. Who refollows me? does not have a backend server and does not send your results to the developer.",
+  ],
+  [
+    "Storage",
+    "The extension does not intentionally store your scan results remotely. Results are shown only in the Instagram page where the extension is running and remain available only during your local browser session.",
+  ],
+  [
+    "Permissions and third parties",
+    "The extension runs on Instagram pages so it can perform a scan when you request one. It communicates with Instagram only to retrieve the information needed for that scan. Your use of Instagram remains subject to Instagram's own terms and privacy policy. The developer does not receive, control, or process the data returned by Instagram during a scan.",
+  ],
+  [
+    "Changes to this policy",
+    "This policy may be updated if the extension changes how it handles data. Any updates will be reflected on this page.",
+  ],
+  [
+    "Questions",
+    "For questions about this policy, contact the developer through the repository or distribution page where you obtained the extension.",
+  ],
 ];
 ---
 
-<Layout title="Privacy policy — Who refollows me?" description="How Who refollows me? handles Instagram data: locally, without a backend server or tracking.">
+<Layout
+  title="Privacy policy — Who refollows me?"
+  description="How Who refollows me? handles Instagram data: locally, without a backend server or tracking."
+>
   <main class="mx-auto w-full max-w-5xl px-5 py-14 md:px-6 md:pb-24">
-    <a class="mb-14 inline-flex items-center gap-2 border-b border-current pb-1 text-xs font-extrabold md:mb-20" href="/"><ArrowLeft class="size-3.5" stroke-width={2.2} aria-hidden="true" />Back to the homepage</a>
-    <p class="mb-5 text-xs font-extrabold uppercase tracking-widest text-stone-500">Plain-English privacy</p>
-    <h1 class="max-w-5xl font-display text-5xl leading-none font-bold tracking-tight sm:text-6xl lg:text-8xl">Your data is yours.<br/><em class="bg-linear-to-r from-rose-500 via-fuchsia-500 to-violet-600 bg-clip-text font-display font-normal text-transparent">That&apos;s the whole idea.</em></h1>
-    <p class="mt-7 mb-12 text-xs text-stone-500 md:mb-16">Last updated: May 11, 2026</p>
+    <a
+      class="mb-14 inline-flex items-center gap-2 border-b border-current pb-1 text-xs font-extrabold md:mb-20"
+      href="/"
+      ><ArrowLeft class="size-3.5" stroke-width={2.2} aria-hidden="true" />Back
+      to the homepage</a
+    >
+    <h1
+      class="max-w-5xl font-display text-5xl leading-none font-bold tracking-tight sm:text-6xl lg:text-8xl"
+    >
+      Your data is yours.<br /><span
+        class="bg-linear-to-r from-rose-500 via-fuchsia-500 to-violet-600 bg-clip-text font-display font-normal text-transparent"
+        >That&apos;s the whole idea</span>
+    </h1>
+    <p class="mt-7 mb-12 text-xs text-stone-500 md:mb-16">
+      Last updated: May 11, 2026
+    </p>
 
-    <div class="grid grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-20">
-      <aside class="rounded-tr-3xl rounded-br-md rounded-bl-md rounded-tl-md bg-stone-950 p-6 text-white md:sticky md:top-7">
-        <p class="mb-4 text-xs font-extrabold uppercase tracking-widest text-rose-300">In one sentence</p>
-        <strong class="text-base leading-7">The extension compares your Instagram connections locally in your browser and does not send them to us.</strong>
+    <div class="grid items-start gap-12 md:gap-20">
+      <aside
+        class="rounded-tr-3xl rounded-br-md rounded-bl-md rounded-tl-md bg-stone-950 p-6 text-white md:top-7"
+      >
+        <p
+          class="mb-4 text-xs font-extrabold uppercase tracking-widest text-rose-300"
+        >
+          In one sentence
+        </p>
+        <strong class="text-base leading-7"
+          >The extension compares your Instagram connections locally in your
+          browser, without accounts, tracking, or a backend server.</strong
+        >
       </aside>
       <article>
-        {sections.slice(0, 2).map(([title, body]) => <section class="mb-8 border-b border-stone-900/10 pb-8"><h2 class="mb-4 font-display text-2xl font-bold tracking-tight">{title}</h2><p class="text-sm leading-8 text-stone-600">{body}</p></section>)}
+        {
+          sections.slice(0, 3).map(([title, body]) => (
+            <section class="mb-8 border-b border-stone-900/10 pb-8">
+              <>
+                <h2 class="mb-4 font-display text-2xl font-bold tracking-tight">
+                  {title}
+                </h2>
+                <p class="text-sm leading-8 text-stone-600">{body}</p>
+              </>
+            </section>
+          ))
+        }
         <section class="mb-8 border-b border-stone-900/10 pb-8">
-          <h2 class="mb-4 font-display text-2xl font-bold tracking-tight">What we don&apos;t do</h2>
-          <ul class="list-disc space-y-2 pl-5 text-sm leading-8 text-stone-600"><li>We do not ask for or store your Instagram password.</li><li>We do not collect analytics or track browsing outside Instagram.</li><li>We do not sell, share, or upload your scan results.</li><li>We do not store your Instagram data in a remote database.</li></ul>
+          <h2 class="mb-4 font-display text-2xl font-bold tracking-tight">
+            What we don&apos;t do
+          </h2>
+          <ul class="list-disc space-y-2 pl-5 text-sm leading-8 text-stone-600">
+            <li>We do not ask for or store your Instagram password.</li><li>
+              We do not create user accounts.
+            </li><li>
+              We do not collect analytics or track browsing outside Instagram.
+            </li><li>We do not sell, share, or upload your scan results.</li><li
+            >
+              We do not store your Instagram data in a remote database.
+            </li><li>
+              We do not keep scan results beyond your local browser session.
+            </li>
+          </ul>
         </section>
-        {sections.slice(2).map(([title, body]) => <section class="mb-8 border-b border-stone-900/10 pb-8 last:border-0"><h2 class="mb-4 font-display text-2xl font-bold tracking-tight">{title}</h2><p class="text-sm leading-8 text-stone-600">{body}</p></section>)}
+        {
+          sections.slice(3).map(([title, body]) => (
+            <section class="mb-8 border-b border-stone-900/10 pb-8 last:border-0">
+              <>
+                <h2 class="mb-4 font-display text-2xl font-bold tracking-tight">
+                  {title}
+                </h2>
+                <p class="text-sm leading-8 text-stone-600">{body}</p>
+              </>
+            </section>
+          ))
+        }
       </article>
     </div>
   </main>

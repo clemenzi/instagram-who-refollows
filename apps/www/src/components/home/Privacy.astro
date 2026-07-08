@@ -21,21 +21,21 @@ import { ArrowUpRight, LockKeyhole } from "@lucide/astro";
       <h2
         class="font-display text-4xl leading-tight font-bold tracking-tight md:text-6xl"
       >
-        What happens in your browser<br /><em
+        Your data stays<br /><span
           class="bg-linear-to-r from-amber-300 via-rose-400 to-fuchsia-400 bg-clip-text font-display font-normal text-transparent"
-          >stays in your browser.</em
+          >with you.</span
         >
       </h2>
       <p class="my-7 max-w-3xl text-base leading-8 text-white/70">
-        Who refollows me? has no backend server. The comparison happens locally
-        using the Instagram tab you are already logged into.
+        The scan runs in your browser, on your device. We don&apos;t ship your
+        follower data off somewhere else.
       </p>
       <ul class="mb-8 max-w-3xl list-none border-t border-white/15 p-0">
         {
           [
-            "No Instagram password requested",
-            "No follower lists sent to us",
-            "No analytics or browsing trackers",
+            "No password needed",
+            "No follower list sent to us",
+            "No trackers watching you",
           ].map((item, index) => (
             <li class="flex items-center gap-5 border-b border-white/15 py-4 text-sm font-bold">
               <span class="text-xs tracking-widest text-rose-400">
@@ -49,7 +49,7 @@ import { ArrowUpRight, LockKeyhole } from "@lucide/astro";
       <a
         class="inline-flex items-center gap-2 border-b border-white/45 pb-1 text-xs font-extrabold"
         href="/privacy"
-        >Read the plain-English privacy policy <ArrowUpRight
+        >Read the privacy policy <ArrowUpRight
           class="size-3.5"
           stroke-width={2.2}
           aria-hidden="true"

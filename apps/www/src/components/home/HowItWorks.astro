@@ -1,19 +1,15 @@
 ---
 const steps = [
-  [
-    "01",
-    "Open Instagram",
-    "Log in as usual and keep Instagram open in a browser tab.",
-  ],
+  ["01", "Open Instagram", "Just stay logged in like you normally are."],
   [
     "02",
-    "Start a scan",
-    "One click compares your followers and following right in your browser.",
+    "Tap scan",
+    "The extension checks your followers and following for you.",
   ],
   [
     "03",
-    "See the mismatch",
-    "Get a clean, useful list of the accounts that do not follow you back.",
+    "See who's not following back",
+    "You get the list right away, straight in your browser.",
   ],
 ] satisfies [string, string, string][];
 ---
@@ -26,16 +22,18 @@ const steps = [
     class="mb-12 grid grid-cols-1 items-end gap-6 md:mb-16 md:grid-cols-2 md:gap-12 lg:gap-20"
   >
     <div>
-      <h2 class="font-display text-4xl leading-tight font-bold tracking-tight md:text-6xl">
-        Three clicks.<br /><em
+      <h2
+        class="font-display text-4xl leading-tight font-bold tracking-tight md:text-6xl"
+      >
+        Check your follows.<br /><span
           class="bg-linear-to-r from-rose-500 via-fuchsia-500 to-violet-600 bg-clip-text font-display font-normal text-transparent"
-          >Zero detective work.</em
+          >In seconds.</span
         >
       </h2>
     </div>
     <p class="mb-1 max-w-md text-base leading-7 text-stone-600">
-      Skip the exports, spreadsheets, and questionable apps. Get the answer while
-      your coffee is still warm.
+      No counting, no spreadsheets, no random app vibes. Just open Instagram and
+      check.
     </p>
   </div>
   <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
