@@ -1,41 +1,25 @@
 {
   "name": "instagram-who-refollows",
-  "version": "1.0.3",
   "private": true,
-  "description": "Find who you follow but they don't follow back",
-  "type": "module",
   "scripts": {
-    "dev": "wxt",
-    "dev:firefox": "wxt -b firefox",
-    "build": "wxt build",
-    "build:firefox": "wxt build -b firefox",
-    "zip": "wxt zip",
-    "zip:firefox": "wxt zip -b firefox",
-    "compile": "tsc --noEmit",
-    "lint": "oxlint",
-    "lint:fix": "oxlint --fix",
-    "format": "oxfmt",
-    "format:check": "oxfmt --check",
-    "check": "pnpm run compile && pnpm run lint && pnpm run format:check",
-    "prepare": "lefthook install",
-    "postinstall": "wxt prepare"
-  },
-  "dependencies": {
-    "@tailwindcss/vite": "^4.3.0",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "tailwindcss": "^4.3.0"
+    "dev": "turbo run dev",
+    "dev:firefox": "turbo run dev:firefox --filter=@instagram-who-refollows/extension",
+    "build": "turbo run build",
+    "build:firefox": "turbo run build:firefox --filter=@instagram-who-refollows/extension",
+    "zip": "turbo run zip --filter=@instagram-who-refollows/extension",
+    "zip:firefox": "turbo run zip:firefox --filter=@instagram-who-refollows/extension",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "check": "pnpm run lint && pnpm run fmt:check",
+    "prepare": "lefthook install"
   },
   "devDependencies": {
-    "@types/react": "^19.2.16",
-    "@types/react-dom": "^19.2.3",
-    "@wxt-dev/auto-icons": "^1.1.1",
-    "@wxt-dev/module-react": "^1.2.2",
     "lefthook": "^2.1.9",
     "oxfmt": "^0.48.0",
     "oxlint": "^1.68.0",
-    "typescript": "^5.9.3",
-    "wxt": "^0.20.26"
+    "turbo": "^2.10.4"
   },
-  "packageManager": "pnpm@11.0.9"
+  "packageManager": "pnpm@11.10.0+sha512.0b7f8b98060031904c017e3a41eb187a16d40eeb829b95c4f8cb03681761fc4ab53dd219115b9b447f4dce1a05a214764461e7d3703392a9f32f9511ce8c86c8"
 }
