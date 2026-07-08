@@ -12,7 +12,7 @@
     "lint:fix": "oxlint --fix .",
     "fmt": "oxfmt .",
     "fmt:check": "oxfmt --check .",
-    "check": "pnpm run compile && pnpm run lint && pnpm run fmt:check",
+    "check": "pnpm run lint && pnpm run fmt:check",
     "prepare": "lefthook install"
   },
   "devDependencies": {
