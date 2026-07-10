@@ -1,0 +1,51 @@
+---
+const steps = [
+  ["01", "Open Instagram", "Just stay logged in like you normally are."],
+  ["02", "Tap scan", "The extension checks your followers and following for you."],
+  ["03", "See who's not following back", "You get the list right away, straight in your browser."],
+] satisfies [string, string, string][];
+---
+
+<section
+  id="how-it-works"
+  class="mx-auto w-full max-w-7xl px-4 py-24 md:px-6 md:py-32"
+>
+  <div
+    class="mb-12 grid grid-cols-1 items-end gap-6 md:mb-16 md:grid-cols-2 md:gap-12 lg:gap-20"
+  >
+    <div>
+      <h2
+        class="font-display text-4xl leading-tight font-bold tracking-tight md:text-6xl"
+      >
+        Check your follows.<br /><span
+          class="bg-linear-to-r from-rose-500 via-fuchsia-500 to-violet-600 bg-clip-text font-display font-normal text-transparent"
+          >In seconds.</span
+        >
+      </h2>
+    </div>
+    <p class="mb-1 max-w-md text-base leading-7 text-stone-600">
+      No counting, no spreadsheets, no random app vibes. Just open Instagram and
+      check.
+    </p>
+  </div>
+  <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+    {
+      steps.map(([number, title, body]) => (
+        <article class="min-h-56 rounded-tr-3xl rounded-br-md rounded-bl-md rounded-tl-md border border-stone-900/10 bg-white/60 p-6 transition hover:-translate-y-1 hover:bg-white hover:shadow-2xl hover:shadow-stone-900/10 md:min-h-72">
+          <div class="flex items-center gap-3">
+            <>
+              <span class="text-xs font-extrabold tracking-widest text-fuchsia-500">
+                {number}
+              </span>
+              <i class="h-px flex-1 bg-stone-900/10" />
+            </>
+          </div>
+          <h3 class="mt-14 mb-3 font-display text-2xl font-bold tracking-tight md:mt-20">
+            {title}
+          </h3>
+          <p class="max-w-sm text-sm leading-7 text-stone-600">{body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

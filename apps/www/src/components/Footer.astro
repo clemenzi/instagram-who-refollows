@@ -1,0 +1,33 @@
+---
+import { ChevronUp, SearchCheck } from "@lucide/astro";
+---
+
+<footer class="mt-7 px-4 py-6 md:pb-9">
+  <div
+    class="mx-auto grid w-full max-w-7xl grid-cols-1 justify-items-center gap-5 text-center md:grid-cols-3 md:items-center"
+  >
+    <a
+      class="flex w-max items-center gap-2.5 justify-self-center text-sm font-bold md:justify-self-start"
+      href="#top"
+    >
+      <img src="/favicon.png" alt="Logo" class="size-8" />
+      Who refollows me?
+    </a>
+    <p class="m-0 font-display text-xs italic text-stone-500">
+      Made for the quietly curious.
+    </p>
+    <div
+      class="flex gap-6 justify-self-center text-xs font-semibold md:justify-self-end"
+    >
+      <a href="/privacy">Privacy</a>
+      <a href="#faq">FAQ</a>
+      <a class="inline-flex items-center gap-1" href="#top"
+        >Back to top <ChevronUp
+          class="size-3.5"
+          stroke-width={2.2}
+          aria-hidden="true"
+        /></a
+      >
+    </div>
+  </div>
+</footer>

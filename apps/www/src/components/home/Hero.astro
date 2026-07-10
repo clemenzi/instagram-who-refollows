@@ -1,0 +1,221 @@
+---
+import {
+  AppWindow,
+  ArrowDownToLine,
+  BadgeCheck,
+  ChevronDown,
+  CircleCheck,
+  ScanSearch,
+  SearchCheck,
+  ShieldCheck,
+} from "@lucide/astro";
+
+const checks = ["No password", "No weird app", "Free"];
+
+const resultRows = [
+  ["AL", "@analog.life", "Analog Life Magazine", "bg-lime-300 text-stone-900"],
+  ["NF", "@nora.frames", "Nora - Photographer", "bg-violet-600 text-white"],
+  ["RS", "@runslow.club", "Run Slow Club", "bg-rose-500 text-white"],
+] satisfies [string, string, string, string][];
+---
+
+<section
+  class="mx-auto grid w-full max-w-7xl grid-cols-1 items-center px-4 py-16 md:px-6 md:py-20 lg:grid-cols-2"
+>
+  <div class="relative z-10 min-w-0 pb-4">
+    <h1
+      class="max-w-2xl font-display text-5xl leading-none font-bold tracking-tight sm:text-6xl md:text-7xl"
+    >
+      See who you follow.<br />
+      <span
+        class="bg-linear-to-r from-rose-500 via-fuchsia-500 to-violet-600 bg-clip-text font-display text-transparent"
+        >But doesn&apos;t follow back.</span
+      >
+    </h1>
+    <p class="mt-8 max-w-xl text-base leading-7 text-stone-700 md:text-lg">
+      Open Instagram, run the scan, and get the list. That&apos;s it. No sketchy
+      tools, no account, no hassle.
+    </p>
+    <div
+      class="mt-8 flex flex-col items-start gap-5 md:flex-row md:items-center md:gap-6"
+    >
+      <a
+        class="flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-linear-to-r from-rose-500 to-fuchsia-500 px-6 text-sm font-extrabold text-white shadow-xl shadow-rose-300/40 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-rose-300/50 md:w-auto"
+        href="https://chromewebstore.google.com/detail/who-refollows-me/caiibdnacbgkdknjedbblmmnmhnnpflo"
+      >
+        <ArrowDownToLine class="size-4" stroke-width={2.2} aria-hidden="true" />
+        Add to Chrome
+      </a>
+      <a
+        class="inline-flex items-center gap-1 border-b border-current pb-0.5 text-sm font-extrabold"
+        href="#how-it-works"
+      >
+        How it works
+        <ChevronDown class="size-4" stroke-width={2.2} aria-hidden="true" />
+      </a>
+    </div>
+    <div class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-stone-600">
+      {
+        checks.map((check) => (
+          <span class="flex items-center gap-1.5 text-xs font-semibold">
+            <CircleCheck
+              class="size-3.5 text-stone-500"
+              stroke-width={2.4}
+              aria-hidden="true"
+            />
+            {check}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+
+  <div
+    class="relative mx-auto mt-12 aspect-square w-full max-w-xl min-w-0 lg:mt-0 lg:ml-8 select-none"
+  >
+    <div
+      class="absolute inset-12 rounded-4xl bg-linear-to-br from-amber-300 via-rose-400 to-violet-600 -rotate-6 shadow-2xl shadow-fuchsia-300/25 md:inset-16 blur-3xl"
+    >
+    </div>
+    <div
+      class="absolute inset-16 rounded-full border border-stone-900/10 -rotate-12 md:inset-20"
+    >
+    </div>
+
+    <div
+      class="absolute top-6 left-2 z-20 flex min-w-48 origin-top-left -rotate-6 scale-90 items-center gap-3 rounded-2xl border border-stone-900/10 bg-white/60 px-4 py-3 shadow-xl backdrop-blur-md md:top-10 md:left-4 md:min-w-56 md:scale-100 justify-between"
+    >
+      <div class="flex items-center gap-2">
+        <span
+          class="grid size-9 place-items-center rounded-full bg-rose-500 text-xs font-extrabold text-white"
+          >MC</span
+        >
+        <span class="grid gap-0.5"
+          ><strong class="text-xs">@maya.cooks</strong><small
+            class="text-xs text-stone-500">Following you</small
+          ></span
+        >
+      </div>
+      <span
+        class="grid size-6 place-items-center rounded-full bg-emerald-500 text-white"
+      >
+        <BadgeCheck class="size-3.5" stroke-width={2.4} aria-hidden="true" />
+      </span>
+    </div>
+
+    <div
+      class="absolute top-16 right-2 z-10 w-11/12 rotate-3 overflow-hidden rounded-3xl border border-stone-900/10 bg-white/90 shadow-2xl shadow-stone-900/15 md:top-20 md:right-5 md:w-5/6 backdrop-blur-md"
+    >
+      <div
+        class="flex h-11 items-center justify-between border-b border-stone-900/10 bg-stone-100 px-4"
+      >
+        <span class="flex items-center gap-2 text-stone-400">
+          <AppWindow class="size-4" stroke-width={2} aria-hidden="true" />
+          <span class="flex gap-1"
+            ><i class="size-1.5 rounded-full bg-stone-400"></i><i
+              class="size-1.5 rounded-full bg-stone-400"></i><i
+              class="size-1.5 rounded-full bg-stone-400"></i></span
+          >
+        </span>
+        <span
+          class="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-stone-500"
+          ><ScanSearch
+            class="size-3.5 text-emerald-500"
+            stroke-width={2.2}
+            aria-hidden="true"
+          />Local scan</span
+        >
+      </div>
+      <div class="p-4 md:p-6">
+        <div class="flex items-center gap-3">
+          <span
+            class="grid size-10 place-items-center rounded-xl bg-linear-to-br from-amber-300 to-fuchsia-500 text-white"
+            ><SearchCheck
+              class="size-5"
+              stroke-width={2.2}
+              aria-hidden="true"
+            /></span
+          >
+          <span class="grid gap-0.5"
+            ><small
+              class="text-xs font-extrabold uppercase tracking-widest text-stone-500"
+              >Scan complete</small
+            ><strong class="font-display text-lg tracking-tight"
+              >Here&apos;s the list.</strong
+            ></span
+          >
+        </div>
+        <div
+          class="my-5 grid grid-cols-3 overflow-hidden rounded-xl border border-stone-900/10"
+        >
+          <div class="grid gap-0.5 border-r border-stone-900/10 p-3">
+            <strong class="text-lg md:text-xl">842</strong><span
+              class="text-xs text-stone-500">Followers</span
+            >
+          </div>
+          <div class="grid gap-0.5 border-r border-stone-900/10 p-3">
+            <strong class="text-lg md:text-xl">917</strong><span
+              class="text-xs text-stone-500">Following</span
+            >
+          </div>
+          <div class="grid gap-0.5 bg-rose-50 p-3 text-rose-600">
+            <strong class="text-lg md:text-xl">75</strong><span class="text-xs"
+              >Not following back</span
+            >
+          </div>
+        </div>
+        <div
+          class="mb-1 flex justify-between text-xs font-extrabold uppercase tracking-wider text-stone-400"
+        >
+          <span>Accounts</span><span>75 results</span>
+        </div>
+        {
+          resultRows.map(([initials, username, name, color], index) => (
+            <div
+              class:list={[
+                "flex min-h-14 items-center gap-3 border-b border-stone-900/10",
+                index === 2 && "opacity-60",
+              ]}
+            >
+              <span
+                class:list={[
+                  "grid size-8 place-items-center rounded-full text-xs font-extrabold",
+                  color,
+                ]}
+              >
+                {initials}
+              </span>
+              <span class="grid flex-1">
+                <>
+                  <strong class="text-xs">{username}</strong>
+                  <small class="text-xs text-stone-500">{name}</small>
+                </>
+              </span>
+              <span class="rounded-full border border-stone-900/10 px-3 py-1 text-xs font-extrabold">
+                View
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div
+      class="absolute right-1 bottom-8 z-20 flex origin-bottom-right rotate-3 scale-90 items-center gap-3 rounded-2xl border border-stone-900/10 bg-white/60 px-4 py-3 shadow-xl backdrop-blur-md md:right-0 md:bottom-12 md:scale-100"
+    >
+      <span
+        class="grid size-9 place-items-center rounded-full bg-violet-600 text-white"
+        ><ShieldCheck
+          class="size-4.5"
+          stroke-width={2.2}
+          aria-hidden="true"
+        /></span
+      >
+      <span class="grid"
+        ><strong class="text-xs">Your data stays here.</strong><small
+          class="text-xs text-stone-500">Nothing gets uploaded.</small
+        ></span
+      >
+    </div>
+  </div>
+</section>

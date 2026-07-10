@@ -1,0 +1,29 @@
+---
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Download from "../components/home/Download.astro";
+import Faq from "../components/home/Faq.astro";
+import Hero from "../components/home/Hero.astro";
+import HowItWorks from "../components/home/HowItWorks.astro";
+import Privacy from "../components/home/Privacy.astro";
+import TrustBar from "../components/home/TrustBar.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Who refollows me? — See who doesn't follow you back on Instagram"
+  description="A simple browser extension that shows who doesn't follow you back on Instagram. No password, no weird apps, no uploads."
+>
+  <Header />
+
+  <main id="top">
+    <Hero />
+    <TrustBar />
+    <HowItWorks />
+    <Privacy />
+    <Faq />
+    <Download />
+  </main>
+
+  <Footer />
+</Layout>

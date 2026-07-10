@@ -8,17 +8,16 @@
     "build:firefox": "turbo run build:firefox --filter=@instagram-who-refollows/extension",
     "zip": "turbo run zip --filter=@instagram-who-refollows/extension",
     "zip:firefox": "turbo run zip:firefox --filter=@instagram-who-refollows/extension",
-    "lint": "oxlint .",
-    "lint:fix": "oxlint --fix .",
-    "fmt": "oxfmt .",
-    "fmt:check": "oxfmt --check .",
-    "check": "pnpm run lint && pnpm run fmt:check",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "fmt": "biome format --write .",
+    "fmt:check": "biome format .",
+    "check": "biome check .",
     "prepare": "lefthook install"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.2",
     "lefthook": "^2.1.9",
-    "oxfmt": "^0.48.0",
-    "oxlint": "^1.68.0",
     "turbo": "^2.10.4"
   },
   "packageManager": "pnpm@11.10.0+sha512.0b7f8b98060031904c017e3a41eb187a16d40eeb829b95c4f8cb03681761fc4ab53dd219115b9b447f4dce1a05a214764461e7d3703392a9f32f9511ce8c86c8"

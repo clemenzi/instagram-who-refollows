@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { Profile, ProgressUpdate, Results } from "../instagram.content/types";
+import { unfollowFromScan } from "./actions";
 import {
+  type AnalysisPortResponse,
   connectToAnalysisPort,
   keepRecentProgress,
   RUN_ANALYSIS_MESSAGE,
-  type AnalysisPortResponse,
 } from "./analysisPort";
 import {
   ErrorMessage,
@@ -15,7 +16,6 @@ import {
   ResultsList,
   ResultsSummary,
 } from "./components";
-import { unfollowFromScan } from "./actions";
 
 type ScanStatus = "loading" | "success" | "error";
 
