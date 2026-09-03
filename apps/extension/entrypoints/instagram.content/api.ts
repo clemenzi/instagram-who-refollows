@@ -6,12 +6,20 @@ import type {
   Profile,
   ProgressUpdate,
 } from "./types";
-import { delay, fetchInstagramJson, PAGE_DELAY_MS, PAGE_SIZE } from "./utils";
+import {
+  delay,
+  fetchInstagramJson,
+  InstagramRequestError,
+  PAGE_DELAY_MS,
+  PAGE_SIZE,
+} from "./utils.ts";
 
 type FetchProfilesOptions = {
   phase: ProgressUpdate["phase"];
   onProgress?: (progress: ProgressUpdate) => void;
 };
+
+const USER_ID_PATTERN = /^\d+$/;
 
 const CURRENT_USER_ENDPOINTS = [
   "/api/v1/accounts/edit/web_form_data/",
@@ -63,6 +71,10 @@ async function getLoggedInUsername(): Promise<string> {
         return username;
       }
     } catch (error) {
+      if (error instanceof InstagramRequestError && [401, 403, 429].includes(error.status)) {
+        throw error;
+      }
+
       console.warn(`[progress] could not resolve logged-in user from ${endpoint}`);
       console.error(error);
     }
@@ -91,20 +103,8 @@ export async function getTargetUsername() {
 }
 
 export async function getUserId(username: string): Promise<string> {
-  return (await getProfilePageUserId(username)) ?? (await getSearchResultUserId(username));
-}
-
-async function getProfilePageUserId(username: string) {
-  const profileData = await fetchInstagramJson<{
-    data?: { user?: { id?: string } };
-  }>("/api/v1/users/web_profile_info/", { username });
-
-  return profileData.data?.user?.id ?? null;
-}
-
-async function getSearchResultUserId(username: string) {
   const searchData = await fetchInstagramJson<{
-    users?: Array<{ user?: { pk?: string; username?: string } }>;
+    users?: Array<{ user?: { pk?: string | number; username?: string } }>;
   }>("/web/search/topsearch/", { query: username });
   const normalizedUsername = username.toLowerCase();
 
@@ -112,11 +112,15 @@ async function getSearchResultUserId(username: string) {
     ?.map(({ user }) => user)
     .find((user) => user?.username?.toLowerCase() === normalizedUsername)?.pk;
 
-  if (!searchId) {
+  if (
+    !searchId ||
+    !USER_ID_PATTERN.test(String(searchId)) ||
+    (typeof searchId === "number" && !Number.isSafeInteger(searchId))
+  ) {
     throw new Error(`Could not find Instagram user "${username}"`);
   }
 
-  return searchId;
+  return String(searchId);
 }
 
 function getProfilesPage(
