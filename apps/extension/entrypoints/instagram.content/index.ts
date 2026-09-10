@@ -1,4 +1,5 @@
-import { CONNECTIONS, fetchProfiles, getTargetUsername, getUserId } from "./api";
+import { getTargetUsername, getUserId } from "./api";
+import { fetchProfiles } from "./friendships";
 import type { ProgressUpdate, Results } from "./types";
 import { buildResults, delay, PAGE_DELAY_MS, publishResults } from "./utils";
 
@@ -32,8 +33,7 @@ async function runInstagramAnalysis(onProgress: ProgressListener): Promise<Resul
     message: "Reading the profiles you follow...",
   });
 
-  const followings = await fetchProfiles(userId, CONNECTIONS.followings, {
-    phase: "followings",
+  const followings = await fetchProfiles(userId, "following", {
     onProgress,
   });
   await delay(PAGE_DELAY_MS);
@@ -42,8 +42,7 @@ async function runInstagramAnalysis(onProgress: ProgressListener): Promise<Resul
     message: "Reading the profiles that follow you...",
   });
 
-  const followers = await fetchProfiles(userId, CONNECTIONS.followers, {
-    phase: "followers",
+  const followers = await fetchProfiles(userId, "followers", {
     onProgress,
   });
   const results = buildResults(followings, followers);

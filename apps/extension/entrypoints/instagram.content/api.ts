@@ -1,23 +1,5 @@
-import type {
-  Connection,
-  InstagramCurrentUserResponse,
-  InstagramGraphqlResponse,
-  InstagramProfilesResponse,
-  Profile,
-  ProgressUpdate,
-} from "./types";
-import {
-  delay,
-  fetchInstagramJson,
-  InstagramRequestError,
-  PAGE_DELAY_MS,
-  PAGE_SIZE,
-} from "./utils.ts";
-
-type FetchProfilesOptions = {
-  phase: ProgressUpdate["phase"];
-  onProgress?: (progress: ProgressUpdate) => void;
-};
+import type { InstagramCurrentUserResponse } from "./types";
+import { fetchInstagramJson, InstagramRequestError } from "./utils.ts";
 
 const USER_ID_PATTERN = /^\d+$/;
 
@@ -40,17 +22,6 @@ const RESERVED_PATH_SEGMENTS = new Set([
   "tv",
   "web",
 ]);
-
-export const CONNECTIONS = {
-  followers: {
-    queryHash: "c76146de99bb02f6415203be841dd25a",
-    edge: "edge_followed_by",
-  },
-  followings: {
-    queryHash: "d04b0a864b4b54837c0d870b0e77e076",
-    edge: "edge_follow",
-  },
-} satisfies Record<string, Connection>;
 
 function getUsernameFromPath(pathname = window.location.pathname) {
   const firstPathSegment = pathname.split("/").filter(Boolean)[0];
@@ -121,80 +92,4 @@ export async function getUserId(username: string): Promise<string> {
   }
 
   return String(searchId);
-}
-
-function getProfilesPage(
-  data: InstagramGraphqlResponse,
-  connection: Connection,
-): InstagramProfilesResponse {
-  const page = data.data?.user?.[connection.edge];
-
-  if (!page) {
-    throw new Error(`Instagram response did not include "${connection.edge}"`);
-  }
-
-  return page;
-}
-
-function getProgressMessage(phase: ProgressUpdate["phase"], collected: number) {
-  return phase === "followings"
-    ? `Read ${collected} profiles you follow.`
-    : `Read ${collected} followers.`;
-}
-
-function toProfile({ node }: InstagramProfilesResponse["edges"][number]): Profile {
-  return {
-    id: node.id,
-    username: node.username,
-    full_name: node.full_name,
-    profile_pic_url: node.profile_pic_url,
-  };
-}
-
-export async function fetchProfiles(
-  userId: string,
-  connection: Connection,
-  options: FetchProfilesOptions,
-): Promise<Profile[]> {
-  const profiles: Profile[] = [];
-  let after: string | null = null;
-  let page = 0;
-
-  console.log(`[progress] fetching ${connection.edge}...`);
-
-  while (true) {
-    page += 1;
-
-    const data: InstagramGraphqlResponse = await fetchInstagramJson("/graphql/query/", {
-      query_hash: connection.queryHash,
-      variables: JSON.stringify({
-        id: userId,
-        include_reel: true,
-        fetch_mutual: true,
-        first: PAGE_SIZE,
-        after,
-      }),
-    });
-
-    const profilePage = getProfilesPage(data, connection);
-
-    profiles.push(...profilePage.edges.map(toProfile));
-
-    options.onProgress?.({
-      phase: options.phase,
-      message: getProgressMessage(options.phase, profiles.length),
-      collected: profiles.length,
-      page,
-    });
-
-    console.log(`[progress] ${connection.edge}: page ${page}, total collected ${profiles.length}`);
-
-    if (!profilePage.page_info.has_next_page) {
-      console.log(`[progress] completed ${connection.edge}: ${profiles.length}`);
-      return profiles;
-    }
-
-    after = profilePage.page_info.end_cursor;
-    await delay(PAGE_DELAY_MS);
-  }
 }

@@ -12,11 +12,6 @@ export type Results = {
   followingsCount: number;
 };
 
-export type Connection = {
-  queryHash: string;
-  edge: "edge_followed_by" | "edge_follow";
-};
-
 export type ProgressPhase = "target" | "user-id" | "followings" | "followers" | "results";
 
 export type ProgressUpdate = {
@@ -24,25 +19,6 @@ export type ProgressUpdate = {
   message: string;
   collected?: number;
   page?: number;
-};
-
-export type InstagramProfilesResponse = {
-  edges: Array<{
-    node: Profile;
-  }>;
-  page_info: {
-    has_next_page: boolean;
-    end_cursor: string | null;
-  };
-};
-
-export type InstagramGraphqlResponse = {
-  data?: {
-    user?: {
-      edge_followed_by?: InstagramProfilesResponse;
-      edge_follow?: InstagramProfilesResponse;
-    };
-  };
 };
 
 export type InstagramCurrentUserResponse = {
