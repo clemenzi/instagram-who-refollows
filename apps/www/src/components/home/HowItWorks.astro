@@ -33,12 +33,10 @@ const steps = [
       steps.map(([number, title, body]) => (
         <article class="min-h-56 rounded-tr-3xl rounded-br-md rounded-bl-md rounded-tl-md border border-stone-900/10 bg-white/60 p-6 transition hover:-translate-y-1 hover:bg-white hover:shadow-2xl hover:shadow-stone-900/10 md:min-h-72">
           <div class="flex items-center gap-3">
-            <>
-              <span class="text-xs font-extrabold tracking-widest text-fuchsia-500">
-                {number}
-              </span>
-              <i class="h-px flex-1 bg-stone-900/10" />
-            </>
+            <span class="text-xs font-extrabold tracking-widest text-fuchsia-500">
+              {number}
+            </span>
+            <i class="h-px flex-1 bg-stone-900/10" />
           </div>
           <h3 class="mt-14 mb-3 font-display text-2xl font-bold tracking-tight md:mt-20">
             {title}

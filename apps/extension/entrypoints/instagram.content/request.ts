@@ -1,24 +1,22 @@
-import type { Profile, Results } from "./types";
+import { INSTAGRAM_APP_ID, INSTAGRAM_ORIGIN } from "./instagram";
 
-export const INSTAGRAM_ORIGIN = "https://www.instagram.com";
-export const PROFILE_URL = `${INSTAGRAM_ORIGIN}/`;
-export const PAGE_SIZE = 50;
-export const PAGE_DELAY_MS = 750;
 const DEFAULT_RATE_LIMIT_DELAY_MS = 60_000;
+
 let rateLimitedUntil = 0;
 
 export class InstagramRequestError extends Error {
-  readonly status: number;
-
-  constructor(status: number, message: string) {
+  constructor(
+    readonly status: number,
+    message: string,
+  ) {
     super(message);
     this.name = "InstagramRequestError";
-    this.status = status;
   }
 }
 
-function rateLimitError() {
+function createRateLimitError() {
   const seconds = Math.max(1, Math.ceil((rateLimitedUntil - Date.now()) / 1000));
+
   return new InstagramRequestError(
     429,
     `Instagram is temporarily limiting requests (429). Wait at least ${seconds} seconds before starting another scan.`,
@@ -26,7 +24,9 @@ function rateLimitError() {
 }
 
 function getRetryDelay(retryAfter: string | null) {
-  if (!retryAfter?.trim()) return DEFAULT_RATE_LIMIT_DELAY_MS;
+  if (!retryAfter?.trim()) {
+    return DEFAULT_RATE_LIMIT_DELAY_MS;
+  }
 
   const seconds = Number(retryAfter);
   const milliseconds = Number.isFinite(seconds)
@@ -38,33 +38,31 @@ function getRetryDelay(retryAfter: string | null) {
     : DEFAULT_RATE_LIMIT_DELAY_MS;
 }
 
-export const delay = (ms: number) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
+export function delay(milliseconds: number) {
+  return new Promise<void>((resolve) => {
+    setTimeout(resolve, milliseconds);
   });
+}
 
 export async function fetchInstagramJson<T>(
   path: string,
   params?: Record<string, string>,
 ): Promise<T> {
   if (Date.now() < rateLimitedUntil) {
-    throw rateLimitError();
+    throw createRateLimitError();
   }
 
   const url = new URL(path, INSTAGRAM_ORIGIN);
-
-  if (params) {
-    url.search = new URLSearchParams(params).toString();
-  }
+  url.search = new URLSearchParams(params).toString();
 
   const response = await fetch(url, {
     credentials: "include",
-    headers: { "x-ig-app-id": "936619743392459" },
+    headers: { "x-ig-app-id": INSTAGRAM_APP_ID },
   });
 
   if (response.status === 429) {
     rateLimitedUntil = Date.now() + getRetryDelay(response.headers.get("retry-after"));
-    throw rateLimitError();
+    throw createRateLimitError();
   }
 
   if (response.status === 401 || response.status === 403 || response.redirected) {
@@ -82,29 +80,4 @@ export async function fetchInstagramJson<T>(
   }
 
   return response.json();
-}
-
-export function buildResults(followings: Profile[], followers: Profile[]): Results {
-  const followerUsernames = new Set(followers.map(({ username }) => username));
-  const followingsWhoFollowBack: Profile[] = [];
-  const dontFollowMeBack: Profile[] = [];
-
-  for (const profile of followings) {
-    if (followerUsernames.has(profile.username)) {
-      followingsWhoFollowBack.push(profile);
-    } else {
-      dontFollowMeBack.push(profile);
-    }
-  }
-
-  return {
-    dontFollowMeBack,
-    followingsWhoFollowBack,
-    followersCount: followers.length,
-    followingsCount: followings.length,
-  };
-}
-
-export function publishResults(results: Results) {
-  Object.assign(globalThis, results, { results });
 }

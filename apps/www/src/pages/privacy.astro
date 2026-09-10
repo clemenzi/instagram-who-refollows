@@ -31,7 +31,7 @@ const sections = [
     "Questions",
     "For questions about this policy, contact the developer through the repository or distribution page where you obtained the extension.",
   ],
-];
+] satisfies [string, string][];
 ---
 
 <Layout
@@ -74,12 +74,10 @@ const sections = [
         {
           sections.slice(0, 3).map(([title, body]) => (
             <section class="mb-8 border-b border-stone-900/10 pb-8">
-              <>
-                <h2 class="mb-4 font-display text-2xl font-bold tracking-tight">
-                  {title}
-                </h2>
-                <p class="text-sm leading-8 text-stone-600">{body}</p>
-              </>
+              <h2 class="mb-4 font-display text-2xl font-bold tracking-tight">
+                {title}
+              </h2>
+              <p class="text-sm leading-8 text-stone-600">{body}</p>
             </section>
           ))
         }
@@ -103,12 +101,10 @@ const sections = [
         {
           sections.slice(3).map(([title, body]) => (
             <section class="mb-8 border-b border-stone-900/10 pb-8 last:border-0">
-              <>
-                <h2 class="mb-4 font-display text-2xl font-bold tracking-tight">
-                  {title}
-                </h2>
-                <p class="text-sm leading-8 text-stone-600">{body}</p>
-              </>
+              <h2 class="mb-4 font-display text-2xl font-bold tracking-tight">
+                {title}
+              </h2>
+              <p class="text-sm leading-8 text-stone-600">{body}</p>
             </section>
           ))
         }

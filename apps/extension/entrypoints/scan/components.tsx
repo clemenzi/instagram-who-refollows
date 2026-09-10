@@ -1,5 +1,5 @@
+import { INSTAGRAM_PROFILE_URL } from "../instagram.content/instagram";
 import type { Profile, ProgressUpdate, Results } from "../instagram.content/types";
-import { PROFILE_URL } from "../instagram.content/utils";
 import { getProgressValue } from "./progress";
 
 export type ProfileActionState =
@@ -133,14 +133,14 @@ function ProfileRow({
       <div className="min-w-0 flex-1">
         <a
           className="block truncate text-sm font-semibold leading-5 text-neutral-950 transition hover:text-sky-600 dark:text-neutral-50 dark:hover:text-sky-400"
-          href={`${PROFILE_URL}${profile.username}/`}
+          href={`${INSTAGRAM_PROFILE_URL}${profile.username}/`}
           rel="noreferrer"
           target="_blank"
         >
           @{profile.username}
         </a>
         <p className="truncate text-xs leading-4 text-neutral-500 dark:text-neutral-400">
-          {profile.full_name || "-"}
+          {profile.fullName || "-"}
         </p>
         {actionState.status === "error" && (
           <p className="truncate text-xs leading-4 text-red-600 dark:text-red-400">

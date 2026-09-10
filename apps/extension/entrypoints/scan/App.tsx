@@ -1,13 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { type AnalysisPortResponse, RUN_ANALYSIS_MESSAGE } from "../../lib/analysisProtocol";
 import type { Profile, ProgressUpdate, Results } from "../instagram.content/types";
 import { unfollowFromScan } from "./actions";
-import {
-  type AnalysisPortResponse,
-  connectToAnalysisPort,
-  keepRecentProgress,
-  RUN_ANALYSIS_MESSAGE,
-} from "./analysisPort";
+import { connectToAnalysisPort, keepRecentProgress, parseTabId } from "./analysisPort";
 import {
   ErrorMessage,
   MissingTabMessage,
@@ -24,10 +20,7 @@ function getErrorMessage(error: unknown) {
 }
 
 function getTabIdFromUrl() {
-  const tabId = new URLSearchParams(window.location.search).get("tabId");
-  const parsedTabId = Number(tabId);
-
-  return Number.isInteger(parsedTabId) ? parsedTabId : null;
+  return parseTabId(new URLSearchParams(window.location.search).get("tabId"));
 }
 
 function ScanPage({ tabId }: { tabId: number }) {

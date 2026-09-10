@@ -20,3 +20,10 @@ Open Instagram, start a scan, and get a clean list of accounts that are in your 
 The extension runs from your browser while you are logged into Instagram. It does not ship with a server and does not store your Instagram data remotely.
 
 _Spiritual successor to [Who Follows Back](https://github.com/clemenzi/who-follows-back)_
+
+## Development
+
+Install dependencies with `pnpm install`, then use:
+
+- `pnpm dev` to run the apps locally
+- `pnpm quality` to run formatting checks, type checks, and production builds

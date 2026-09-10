@@ -1,18 +1,23 @@
-import type { ProgressUpdate, Results } from "../instagram.content/types";
+import { ANALYSIS_PORT_NAME } from "../../lib/analysisProtocol.ts";
+import type { ProgressUpdate } from "../instagram.content/types";
 
-export const ANALYSIS_PORT = "instagram-analysis";
-export const RUN_ANALYSIS_MESSAGE = { type: "run" } as const;
+const TAB_ID_PATTERN = /^\d+$/;
+
 export const MAX_PROGRESS_ITEMS = 5;
 
-export type AnalysisPortResponse =
-  | { type: "progress"; progress: ProgressUpdate }
-  | { type: "results"; results: Results }
-  | { type: "error"; message: string };
-
 export function connectToAnalysisPort(tabId: number) {
-  return browser.tabs.connect(tabId, { name: ANALYSIS_PORT });
+  return browser.tabs.connect(tabId, { name: ANALYSIS_PORT_NAME });
 }
 
 export function keepRecentProgress(progress: ProgressUpdate[], latestProgress: ProgressUpdate) {
   return [...progress.slice(1 - MAX_PROGRESS_ITEMS), latestProgress];
+}
+
+export function parseTabId(value: string | null) {
+  if (!value || !TAB_ID_PATTERN.test(value)) {
+    return null;
+  }
+
+  const tabId = Number(value);
+  return Number.isSafeInteger(tabId) && tabId >= 0 ? tabId : null;
 }

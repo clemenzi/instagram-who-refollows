@@ -1,17 +1,16 @@
+import {
+  ANALYSIS_PORT_NAME,
+  type AnalysisPortRequest,
+  type AnalysisPortResponse,
+} from "../../lib/analysisProtocol";
 import { getTargetUsername, getUserId } from "./api";
 import { fetchProfiles } from "./friendships";
+import { REQUEST_DELAY_MS } from "./instagram";
+import { delay } from "./request";
+import { buildResults, publishResults } from "./results";
 import type { ProgressUpdate, Results } from "./types";
-import { buildResults, delay, PAGE_DELAY_MS, publishResults } from "./utils";
 
-const RUN_MESSAGE = "run";
-const ANALYSIS_PORT = "instagram-analysis";
 type ProgressListener = (progress: ProgressUpdate) => void;
-
-type AnalysisPortMessage = { type: "run" };
-type AnalysisPortResponse =
-  | { type: "progress"; progress: ProgressUpdate }
-  | { type: "results"; results: Results }
-  | { type: "error"; message: string };
 
 async function runInstagramAnalysis(onProgress: ProgressListener): Promise<Results> {
   onProgress({
@@ -34,7 +33,7 @@ async function runInstagramAnalysis(onProgress: ProgressListener): Promise<Resul
   const followings = await fetchProfiles(userId, "following", {
     onProgress,
   });
-  await delay(PAGE_DELAY_MS);
+  await delay(REQUEST_DELAY_MS);
   onProgress({
     phase: "followers",
     message: "Reading the profiles that follow you...",
@@ -80,7 +79,7 @@ export default defineContentScript({
     };
 
     browser.runtime.onConnect.addListener((port) => {
-      if (port.name !== ANALYSIS_PORT) {
+      if (port.name !== ANALYSIS_PORT_NAME) {
         return;
       }
 
@@ -88,8 +87,8 @@ export default defineContentScript({
         port.postMessage({ type: "progress", progress } satisfies AnalysisPortResponse);
       };
 
-      const onMessage = (message: AnalysisPortMessage) => {
-        if (message.type !== RUN_MESSAGE) {
+      const onMessage = (message: AnalysisPortRequest) => {
+        if (message.type !== "run") {
           return;
         }
 

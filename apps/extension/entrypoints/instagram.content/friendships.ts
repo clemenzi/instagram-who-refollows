@@ -1,5 +1,6 @@
+import { isInstagramId, PROFILE_PAGE_SIZE, REQUEST_DELAY_MS } from "./instagram";
+import { delay, fetchInstagramJson } from "./request";
 import type { Profile, ProgressUpdate } from "./types";
-import { delay, fetchInstagramJson, PAGE_DELAY_MS, PAGE_SIZE } from "./utils.ts";
 
 type Connection = "followers" | "following";
 type FetchOptions = { onProgress?: (progress: ProgressUpdate) => void };
@@ -8,8 +9,6 @@ type FriendshipPage = {
   next_max_id?: unknown;
   has_more?: boolean;
 };
-
-const ID_PATTERN = /^\d+$/;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -29,32 +28,24 @@ function parsePage(data: unknown, connection: Connection): FriendshipPage {
   return data as FriendshipPage;
 }
 
-function validId(value: unknown): value is string | number {
-  return (
-    (typeof value === "string" && ID_PATTERN.test(value)) ||
-    (typeof value === "number" && Number.isSafeInteger(value) && value > 0)
-  );
-}
-
-function parseProfile(value: unknown): Profile & { id: string } {
+function parseProfile(value: unknown): Profile {
   if (!isRecord(value) || typeof value.username !== "string" || !value.username.trim()) {
     throw new Error("Instagram returned an invalid profile. Scan incomplete.");
   }
-  const id = [value.pk_id, value.pk, value.id].find(validId);
+  const id = [value.pk_id, value.pk, value.id].find(isInstagramId);
   if (id === undefined) {
     throw new Error("Instagram returned a profile without a valid ID. Scan incomplete.");
   }
   return {
     id: String(id),
     username: value.username,
-    full_name: typeof value.full_name === "string" ? value.full_name : "",
-    profile_pic_url: typeof value.profile_pic_url === "string" ? value.profile_pic_url : undefined,
+    fullName: typeof value.full_name === "string" ? value.full_name : "",
   };
 }
 
 function nextCursor(page: FriendshipPage): string {
   const value = page.next_max_id;
-  if (value !== undefined && value !== null && typeof value !== "string" && !validId(value)) {
+  if (value !== undefined && value !== null && value !== "" && !isInstagramId(value)) {
     throw new Error("Instagram returned an invalid pagination cursor. Scan incomplete.");
   }
   const cursor = String(value ?? "");
@@ -69,7 +60,9 @@ export async function fetchProfiles(
   connection: Connection,
   { onProgress }: FetchOptions = {},
 ): Promise<Profile[]> {
-  if (!validId(userId)) throw new Error("Invalid Instagram user ID.");
+  if (!isInstagramId(userId)) {
+    throw new Error("Invalid Instagram user ID.");
+  }
   const profiles = new Map<string, Profile>();
   const cursors = new Set<string>();
   let cursor = "";
@@ -77,7 +70,7 @@ export async function fetchProfiles(
 
   do {
     const params: Record<string, string> = {
-      count: String(PAGE_SIZE),
+      count: String(PROFILE_PAGE_SIZE),
       search_surface: "follow_list_page",
     };
     if (cursor) params.max_id = cursor;
@@ -104,7 +97,7 @@ export async function fetchProfiles(
     });
     if (cursor) {
       cursors.add(cursor);
-      await delay(PAGE_DELAY_MS);
+      await delay(REQUEST_DELAY_MS);
     }
   } while (cursor);
 

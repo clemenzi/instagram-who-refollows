@@ -1,7 +1,6 @@
+import { isInstagramId } from "./instagram";
+import { fetchInstagramJson, InstagramRequestError } from "./request";
 import type { InstagramCurrentUserResponse } from "./types";
-import { fetchInstagramJson, InstagramRequestError } from "./utils.ts";
-
-const USER_ID_PATTERN = /^\d+$/;
 
 const CURRENT_USER_ENDPOINTS = [
   "/api/v1/accounts/edit/web_form_data/",
@@ -79,11 +78,7 @@ export async function getUserId(username: string): Promise<string> {
     ?.map(({ user }) => user)
     .find((user) => user?.username?.toLowerCase() === normalizedUsername)?.pk;
 
-  if (
-    !searchId ||
-    !USER_ID_PATTERN.test(String(searchId)) ||
-    (typeof searchId === "number" && !Number.isSafeInteger(searchId))
-  ) {
+  if (!searchId || !isInstagramId(searchId)) {
     throw new Error(`Could not find Instagram user "${username}"`);
   }
 

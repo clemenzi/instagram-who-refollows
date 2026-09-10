@@ -1,8 +1,7 @@
 export type Profile = {
-  id?: string;
+  id: string;
   username: string;
-  full_name: string;
-  profile_pic_url?: string;
+  fullName: string;
 };
 
 export type Results = {

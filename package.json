@@ -6,6 +6,7 @@
     "dev:firefox": "turbo run dev:firefox --filter=@instagram-who-refollows/extension",
     "build": "turbo run build",
     "build:firefox": "turbo run build:firefox --filter=@instagram-who-refollows/extension",
+    "typecheck": "turbo run typecheck",
     "zip": "turbo run zip --filter=@instagram-who-refollows/extension",
     "zip:firefox": "turbo run zip:firefox --filter=@instagram-who-refollows/extension",
     "lint": "biome lint .",
@@ -13,6 +14,7 @@
     "fmt": "biome format --write .",
     "fmt:check": "biome format .",
     "check": "biome check .",
+    "quality": "pnpm check && pnpm typecheck && pnpm build",
     "prepare": "lefthook install"
   },
   "devDependencies": {

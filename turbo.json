@@ -9,8 +9,8 @@
       "dependsOn": ["^build:firefox"],
       "outputs": [".output/**"]
     },
-    "compile": {
-      "dependsOn": ["^compile"]
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
     },
     "dev": {
       "cache": false,

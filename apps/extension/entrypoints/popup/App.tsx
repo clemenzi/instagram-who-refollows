@@ -41,7 +41,7 @@ function App() {
     try {
       const instagramTab = await findInstagramTab();
 
-      if (instagramTab?.id) {
+      if (instagramTab?.id !== undefined) {
         await openScanWindow(instagramTab.id);
       } else {
         await openInstagramHome();
