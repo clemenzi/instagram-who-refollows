@@ -20,14 +20,12 @@ async function runInstagramAnalysis(onProgress: ProgressListener): Promise<Resul
   });
   const username = await getTargetUsername();
 
-  console.log(`[progress] target username: ${username}`);
   onProgress({
     phase: "user-id",
     message: `Found @${username}. Resolving the Instagram user ID...`,
   });
 
   const userId = await getUserId(username);
-  console.log("[progress] user id resolved");
   onProgress({
     phase: "followings",
     message: "Reading the profiles you follow...",
@@ -48,7 +46,6 @@ async function runInstagramAnalysis(onProgress: ProgressListener): Promise<Resul
   const results = buildResults(followings, followers);
 
   publishResults(results);
-  console.log("[progress] done");
   onProgress({
     phase: "results",
     message: `Scan complete: ${results.dontFollowMeBack.length} profiles do not follow you back.`,

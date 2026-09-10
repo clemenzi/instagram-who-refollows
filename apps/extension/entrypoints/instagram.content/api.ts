@@ -45,9 +45,6 @@ async function getLoggedInUsername(): Promise<string> {
       if (error instanceof InstagramRequestError && [401, 403, 429].includes(error.status)) {
         throw error;
       }
-
-      console.warn(`[progress] could not resolve logged-in user from ${endpoint}`);
-      console.error(error);
     }
   }
 
@@ -69,8 +66,7 @@ export async function getTargetUsername() {
     return usernameFromPath;
   }
 
-  console.log("[progress] no profile username in URL, resolving logged-in user");
-  return getLoggedInUsername();
+  return await getLoggedInUsername();
 }
 
 export async function getUserId(username: string): Promise<string> {

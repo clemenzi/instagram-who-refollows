@@ -107,13 +107,4 @@ export function buildResults(followings: Profile[], followers: Profile[]): Resul
 
 export function publishResults(results: Results) {
   Object.assign(globalThis, results, { results });
-
-  console.log("[results]", results);
-  console.table(
-    results.dontFollowMeBack.map(({ username, full_name }) => ({
-      username,
-      nome: full_name || "-",
-      profilo: `${PROFILE_URL}${username}/`,
-    })),
-  );
 }
