@@ -87,34 +87,37 @@ function ScanPage({ tabId }: { tabId: number }) {
     port.postMessage(RUN_ANALYSIS_MESSAGE);
   }, [tabId]);
 
-  const unfollowProfile = useCallback(async (profile: Profile) => {
-    setUnfollowStates((states) => ({ ...states, [profile.username]: { status: "loading" } }));
+  const unfollowProfile = useCallback(
+    async (profile: Profile) => {
+      setUnfollowStates((states) => ({ ...states, [profile.username]: { status: "loading" } }));
 
-    try {
-      await unfollowFromScan(profile);
+      try {
+        await unfollowFromScan(tabId, profile);
 
-      setUnfollowStates((states) => ({ ...states, [profile.username]: { status: "done" } }));
-      setResults((currentResults) =>
-        currentResults
-          ? {
-              ...currentResults,
-              dontFollowMeBack: currentResults.dontFollowMeBack.filter(
-                ({ username }) => username !== profile.username,
-              ),
-              followingsCount: Math.max(0, currentResults.followingsCount - 1),
-            }
-          : currentResults,
-      );
-    } catch (unfollowError) {
-      setUnfollowStates((states) => ({
-        ...states,
-        [profile.username]: {
-          status: "error",
-          message: getErrorMessage(unfollowError),
-        },
-      }));
-    }
-  }, []);
+        setUnfollowStates((states) => ({ ...states, [profile.username]: { status: "done" } }));
+        setResults((currentResults) =>
+          currentResults
+            ? {
+                ...currentResults,
+                dontFollowMeBack: currentResults.dontFollowMeBack.filter(
+                  ({ username }) => username !== profile.username,
+                ),
+                followingsCount: Math.max(0, currentResults.followingsCount - 1),
+              }
+            : currentResults,
+        );
+      } catch (unfollowError) {
+        setUnfollowStates((states) => ({
+          ...states,
+          [profile.username]: {
+            status: "error",
+            message: getErrorMessage(unfollowError),
+          },
+        }));
+      }
+    },
+    [tabId],
+  );
 
   useEffect(() => {
     startScan();

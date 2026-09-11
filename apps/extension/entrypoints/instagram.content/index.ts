@@ -3,12 +3,14 @@ import {
   type AnalysisPortRequest,
   type AnalysisPortResponse,
 } from "../../lib/analysisProtocol";
+import { UNFOLLOW_MESSAGE_TYPE, type UnfollowResponse } from "../../lib/unfollowProtocol";
 import { getTargetUsername, getUserId } from "./api";
 import { fetchProfiles } from "./friendships";
 import { REQUEST_DELAY_MS } from "./instagram";
 import { delay } from "./request";
 import { buildResults, publishResults } from "./results";
 import type { ProgressUpdate, Results } from "./types";
+import { unfollowProfile } from "./unfollow";
 
 type ProgressListener = (progress: ProgressUpdate) => void;
 
@@ -56,6 +58,21 @@ async function runInstagramAnalysis(onProgress: ProgressListener): Promise<Resul
 export default defineContentScript({
   matches: ["*://*.instagram.com/*"],
   main() {
+    browser.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+      if (message?.type !== UNFOLLOW_MESSAGE_TYPE) {
+        return;
+      }
+      void unfollowProfile(message.userId).then(
+        () => sendResponse({ success: true } satisfies UnfollowResponse),
+        (error: unknown) =>
+          sendResponse({
+            success: false,
+            message: error instanceof Error ? error.message : "Could not unfollow this profile.",
+          } satisfies UnfollowResponse),
+      );
+      return true;
+    });
+
     let activeRun: Promise<Results> | null = null;
     const progressListeners = new Set<ProgressListener>();
 
