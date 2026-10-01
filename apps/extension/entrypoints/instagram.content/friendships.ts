@@ -45,7 +45,10 @@ function parseProfile(value: unknown): Profile {
 
 function nextCursor(page: FriendshipPage): string {
   const value = page.next_max_id;
-  if (value !== undefined && value !== null && value !== "" && !isInstagramId(value)) {
+  // Pagination cursors are opaque tokens, not Instagram user IDs.
+  const validCursor =
+    (typeof value === "string" && value.trim().length > 0) || isInstagramId(value);
+  if (value !== undefined && value !== null && value !== "" && !validCursor) {
     throw new Error("Instagram returned an invalid pagination cursor. Scan incomplete.");
   }
   const cursor = String(value ?? "");
